@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TreeWatch Township — Live Prototype System & 13-Slide Pitch Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-cream: #F4F5EE;
+      --bg-card: #FFFFFF;
+      --bg-soft: #E7ECE0;
+      --olive-dark: #2C3825;
+      --olive-main: #4E5E42;
+      --sage-pill: #7D9165;
+      --sage-light: #D5DEC8;
+      --sdp-red: #D9232A;
+      --sdp-orange: #F58220;
+      --risk-high: #C92A2A;
+      --risk-high-bg: #FFE3E3;
+      --risk-med: #E67700;
+      --risk-med-bg: #FFF3BF;
+      --risk-low: #2B8A3E;
+      --risk-low-bg: #D3F9D8;
+      --text-main: #222A1D;
+      --text-muted: #5A6650;
+      --border: #D5DEC8;
+      --shadow: 0 14px 36px rgba(44, 56, 37, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background: var(--bg-cream);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ==========================================
+       TOP GLOBAL SWITCHER BAR
+       ========================================== */
+    .top-bar {
+      background: var(--olive-dark);
+      color: #FFFFFF;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sdp-logo-box {
+      background: linear-gradient(135deg, var(--sdp-red) 0%, var(--sdp-orange) 100%);
+      color: #fff;
+      font-weight: 800;
+      font-size: 10.5px;
+      line-height: 1.1;
+      padding: 6px 10px;
+      border-radius: 8px;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      box-shadow: 0 2px 8px rgba(217,35,42,0.4);
+    }
+
+    .brand-title h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #F4F5EE;
+    }
+
+    .brand-title p {
+      font-size: 11px;
+      color: var(--sage-light);
+    }
+
+    .mode-switcher {
+      display: flex;
+      background: rgba(255,255,255,0.1);
+      padding: 4px;
+      border-radius: 999px;
+      gap: 4px;
+    }
+
+    .mode-btn {
+      border: none;
+      background: transparent;
+      color: #E2E8D8;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .mode-btn.active {
+      background: linear-gradient(135deg, var(--sdp-red), var(--sdp-orange));
+      color: #FFFFFF;
+      box-shadow: 0 2px 10px rgba(245, 130, 32, 0.35);
+    }
+
+    .timer-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.08);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .timer-btn {
+      background: var(--sage-pill);
+      color: #fff;
+      border: none;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* ==========================================
+       VIEW CONTAINERS
+       ========================================== */
+    .main-view {
+      display: none;
+      flex: 1;
+      width: 100%;
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .main-view.active {
+      display: block;
+    }
+
+    /* Toast Notification */
+    .toast-banner {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      max-width: 380px;
+      background: var(--olive-dark);
+      color: #fff;
+      padding: 14px 18px;
+      border-radius: 16px;
+      border-left: 5px solid var(--sdp-orange);
+      box-shadow: 0 14px 35px rgba(0,0,0,0.28);
+      z-index: 999;
+      display: none;
+      align-items: flex-start;
+      gap: 12px;
+      animation: popIn 0.25s ease;
+    }
+
+    @keyframes popIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* ==========================================
+       PROTOTYPE SYSTEM STYLES
+       ========================================== */
+    .proto-header-strip {
+      background: linear-gradient(135deg, var(--olive-main) 0%, var(--olive-dark) 100%);
+      color: #fff;
+      border-radius: 20px;
+      padding: 18px 22px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .user-role-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .role-tab {
+      background: rgba(255,255,255,0.14);
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.25);
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .role-tab.active {
+      background: #FFFFFF;
+      color: var(--olive-dark);
+      border-color: #FFFFFF;
+    }
+
+    /* Resident App Sub-Navigation */
+    .proto-nav {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .proto-tab-btn {
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 10px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .proto-tab-btn.active {
+      border-color: var(--olive-main);
+      background: #EBF0E4;
+      box-shadow: 0 6px 18px rgba(78, 94, 66, 0.12);
+    }
+
+    .tab-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--bg-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .proto-tab-btn.active .tab-icon {
+      background: var(--olive-main);
+      color: #fff;
+    }
+
+    .proto-screen {
+      display: none;
+    }
+
+    .proto-screen.active {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 18px;
+    }
+
+    @media (max-width: 860px) {
+      .proto-screen.active {
+        grid-template-columns: 1fr;
+      }
+      .proto-nav {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .panel-card {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel-title {
+      font-family: 'Fraunces', serif;
+      font-size: 19px;
+      color: var(--olive-dark);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sage-pill {
+      display: inline-block;
+      background: var(--sage-pill);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 11px;
+      border-radius: 999px;
+      letter-spacing: 0.3px;
+    }
+
+    .risk-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .risk-HIGH { background: var(--risk-high-bg); color: var(--risk-high); }
+    .risk-MEDIUM { background: var(--risk-med-bg); color: var(--risk-med); }
+    .risk-LOW { background: var(--risk-low-bg); color: var(--risk-low); }
+
+    /* Guided Photo Grid */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .photo-box {
+      border: 1.5px solid #2B8A3E;
+      background: #EBFBEE;
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+    }
+
+    .photo-box.blurry {
+      border-color: var(--sdp-red);
+      background: #FFF5F5;
+    }
+
+    .cue-btn {
+      border: 1.5px solid var(--border);
+      background: var(--bg-cream);
+      color: var(--text-main);
+      padding: 8px 13px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      margin: 4px 4px 0 0;
+      transition: all 0.15s;
+    }
+
+    .cue-btn.active {
+      background: var(--olive-main);
+      color: #fff;
+      border-color: var(--olive-main);
+    }
+
+    .primary-cta {
+      width: 100%;
+      background: linear-gradient(135deg, var(--olive-main), var(--olive-dark));
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 14px;
+      box-shadow: 0 8px 20px rgba(44, 56, 37, 0.2);
+    }
+
+    /* ==========================================
+       13-SLIDE PITCH DECK STYLES (BOTANICAL THEME)
+       ========================================== */
+    .deck-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 10px 16px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .slide-card {
+      background: #F4F5EE;
+      border: 2px solid var(--olive-main);
+      border-radius: 24px;
+      min-height: 540px;
+      padding: 34px 40px;
+      box-shadow: var(--shadow);
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide-card.active {
+      display: flex;
+    }
+
+    .slide-card.olive-theme {
+      background: var(--olive-main);
+      color: #F4F5EE;
+    }
+
+    .slide-header-tag {
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--olive-main);
+      margin-bottom: 6px;
+    }
+
+    .slide-card.olive-theme .slide-header-tag {
+      color: var(--sage-light);
+    }
+
+    .slide-h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 34px;
+      color: var(--olive-dark);
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+
+    .slide-card.olive-theme .slide-h1 {
+      color: #FFFFFF;
+    }
+
+    .botanical-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 14px 0;
+    }
+
+    .botanical-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin: 14px 0;
+    }
+
+    @media (max-width: 800px) {
+      .botanical-grid-3, .botanical-grid-2 {
+        grid-template-columns: 1fr;
+      }
+      .slide-card {
+        padding: 22px;
+      }
+    }
+
+    .botanical-box {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border);
+      border-left: 6px solid var(--olive-main);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .deck-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      font-size: 13px;
+      border: 1px solid var(--border);
+    }
+
+    .deck-table th {
+      background: var(--olive-main);
+      color: #fff;
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 12px;
+    }
+
+    .deck-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .slide-footer {
+      margin-top: 20px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(78, 94, 66, 0.2);
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .slide-card.olive-theme .slide-footer {
+      border-top-color: rgba(255,255,255,0.2);
+      color: var(--sage-light);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       TOP NAVIGATION & MODE TOGGLE BAR
+       ========================================== -->
+  <header class="top-bar">
+    <div class="brand-left">
+      <div class="sdp-logo-box">Sime Darby<br>Property</div>
+      <div class="brand-title">
+        <h1>TreeWatch Township</h1>
+        <p>Panji-Panji Utara (UiTM) • University Hackathon 2026 | Planet & Climate Resilience</p>
+      </div>
+    </div>
+
+    <!-- Seamless Toggle Between Live System Prototype & 13-Slide Pitch Deck -->
+    <div class="mode-switcher">
+      <button class="mode-btn active" id="btn-mode-proto" onclick="switchGlobalMode('proto')">
+        📱 Live Prototype System
+      </button>
+      <button class="mode-btn" id="btn-mode-deck" onclick="switchGlobalMode('deck')">
+        📊 13-Slide Pitch Deck
+      </button>
+    </div>
+
+    <div class="timer-box">
+      <span>⏱️ Pitch Timer: <strong id="pitchTimerDisplay">05:00</strong></span>
+      <button class="timer-btn" onclick="togglePitchTimer()" id="timerToggleBtn">Start</button>
+      <button class="timer-btn" style="background:rgba(255,255,255,0.2);" onclick="resetPitchTimer()">Reset</button>
+    </div>
+  </header>
+
+  <!-- Live Toast Notification -->
+  <div class="toast-banner" id="toastBanner">
+    <div style="font-size:22px;">🔔</div>
+    <div style="flex:1;">
+      <strong id="toastHead" style="font-size:13.5px; display:block;">System Update</strong>
+      <span id="toastMsg" style="font-size:12px; color:#D5DEC8;">Action completed.</span>
+    </div>
+    <button onclick="document.getElementById('toastBanner').style.display='none'" style="background:none;border:none;color:#fff;font-weight:800;cursor:pointer;">✕</button>
+  </div>
+
+  <!-- ====================================================================================
+       MODE 1: LIVE INTERACTIVE PROTOTYPE SYSTEM (RESIDENT FOCUS + HANDLER TRIAGE VIEW)
+       ==================================================================================== -->
+  <main class="main-view active" id="view-proto">
+
+    <!-- Role Context Banner -->
+    <div class="proto-header-strip">
+      <div>
+        <span style="font-size:11px; text-transform:uppercase; letter-spacing:0.8px; color:var(--sage-light); font-weight:700;">
+          Interactive Hackathon Prototype • City of Elmina Township Demo
+        </span>
+        <h2 style="font-family:'Fraunces',serif; font-size:22px; margin-top:2px;" id="activeRoleHeading">
+          Primary User: Resident Public Safety & Tree Reporting App
+        </h2>
+      </div>
+      <div class="user-role-tabs">
+        <button class="role-tab active" id="roleBtnResident" onclick="switchUserPerspective('resident')">
+          👤 Primary User: Citizen / Resident View
+        </button>
+        <button class="role-tab" id="roleBtnHandler" onclick="switchUserPerspective('handler')">
+          🛠️ Secondary User: Township Handler & Arborist Queue
+        </button>
+      </div>
+    </div>
+
+    <!-- 4 Interactive System Tabs -->
+    <div class="proto-nav">
+      <button class="proto-tab-btn active" id="ptab-btn-1" onclick="openProtoTab(1)">
+        <div class="tab-icon">📷</div>
+        <div>
+          <strong style="font-size:13px; display:block; color:var(--olive-dark);">1. Scan & Report</strong>
+          <span style="font-size:11px; color:var(--text-muted);">Guided Photos + Auto-GPS</span>
+        </div>
+      </button>
+      <button class="proto-tab-btn" id="ptab-btn-2" onclick="openProtoTab(2)">
+        <div class="tab-icon">🗺️</div>
+        <div>
+          <strong style="font-size:13px; display:block; color:var(--olive-dark);">2. 15m Fall Zone Map</strong>
+          <span style="font-size:11px; color:var(--text-muted);">Report Count & Risk Radius</span>
+        </div>
+      </button>
+      <button class="proto-tab-btn" id="ptab-btn-3" onclick="openProtoTab(3)">
+        <div class="tab-icon">⛈️</div>
+        <div>
+          <strong style="font-size:13px; display:block; color:var(--olive-dark);">3. Live Storm Ranker</strong>
+          <span style="font-size:11px; color:var(--text-muted);">Weather Sliders & Priority</span>
+        </div>
+      </button>
+      <button class="proto-tab-btn" id="ptab-btn-4" onclick="openProtoTab(4)">
+        <div class="tab-icon">🔔</div>
+        <div>
+          <strong style="font-size:13px; display:block; color:var(--olive-dark);" id="tab4Title">4. My Status & Queue</strong>
+          <span style="font-size:11px; color:var(--text-muted);" id="tab4Sub">100% Citizen Updates</span>
+        </div>
+      </button>
+    </div>
+
+    <!-- ==========================================
+         SCREEN 1: CITIZEN SCAN & AI REPORT
+         ========================================== -->
+    <section class="proto-screen active" id="pscreen-1">
+      <!-- Left Column: 3-Step Resident Input -->
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>Step-by-Step Citizen Scan (Under 2 Mins)</span>
+          <span class="sage-pill">Primary User: Resident</span>
+        </div>
+        <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:12px;">
+          Residents act as the eyes on the ground. Three quick steps: <strong>where, what you noticed, send</strong>.
+        </p>
+
+        <!-- Emergency Safety Guardrail -->
+        <div style="background:#FFF5F5; border:1.5px solid #FFA8A8; border-radius:12px; padding:10px 12px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
+          <span style="font-size:11.5px; color:#961E1E; font-weight:600;">
+            🚨 <strong>Safety Rule:</strong> If a tree is falling or blocking a road, keep away and call emergency services immediately.
+          </span>
+          <button onclick="triggerToast('Emergency Dispatch Alerted', 'Live GPS coordinates sent to MERS 999 and SDP Township Security.')" style="background:var(--sdp-red); color:#fff; border:none; border-radius:8px; padding:6px 10px; font-size:11px; font-weight:800; cursor:pointer; white-space:nowrap;">
+            Call 999 / SDP
+          </button>
+        </div>
+
+        <!-- 1. Where (GPS Auto-Tag & Duplicate Merge) -->
+        <div style="background:var(--bg-cream); border:1px solid var(--border); border-radius:14px; padding:12px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="font-size:13px; color:var(--olive-dark);">1. Where: Auto-GPS Tree Matching</strong>
+            <span style="font-size:11px; color:#2B8A3E; font-weight:800;">● GPS Locked (4m accuracy)</span>
+          </div>
+          <select id="scanTreeSelect" onchange="updateScanTreeSelection()" style="width:100%; margin-top:8px; padding:9px 12px; border-radius:10px; border:1.5px solid var(--olive-main); font-weight:700; font-size:12.5px; background:#fff;">
+            <option value="ELM-104">🌳 #ELM-104 • Angsana (Persiaran Shorea Roadside) — 3 Existing Reports</option>
+            <option value="ELM-209">🌳 #ELM-209 • Rain Tree (Central Park Playground) — 6 Existing Reports</option>
+            <option value="NEW">📍 Unlisted Tree • Jalan Elmina U16 Footpath (Create New Pin #ELM-405)</option>
+          </select>
+          <div id="duplicateMergeBanner" style="margin-top:8px; font-size:11.5px; color:#1B5E20; background:#EBFBEE; padding:7px 10px; border-radius:8px; font-weight:600;">
+            🤝 <strong>Duplicate Merger Active:</strong> 3 neighbors already reported #ELM-104. Your photos will merge into the same tree ticket!
+          </div>
+        </div>
+
+        <!-- 2. Guided Photos + Blur Quality Gate -->
+        <div style="background:var(--bg-cream); border:1px solid var(--border); border-radius:14px; padding:12px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="font-size:13px; color:var(--olive-dark);">2. Guided Photos (4 Required Angles)</strong>
+            <button onclick="triggerBlurSimulation()" style="background:#FFE3E3; color:var(--sdp-red); border:1px solid #FFA8A8; padding:3px 9px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer;">
+              Simulate Blurry Photo
+            </button>
+          </div>
+          <div class="photo-grid">
+            <div class="photo-box">
+              <span style="font-size:18px;">🌲</span>
+              <div>
+                <strong style="font-size:12px; display:block;">1. Whole Tree</strong>
+                <span style="font-size:10.5px; color:var(--text-muted);">✓ Clear posture</span>
+              </div>
+            </div>
+            <div class="photo-box">
+              <span style="font-size:18px;">🪵</span>
+              <div>
+                <strong style="font-size:12px; display:block;">2. Trunk Base</strong>
+                <span style="font-size:10.5px; color:var(--text-muted);">✓ Root collar clear</span>
+              </div>
+            </div>
+            <div class="photo-box">
+              <span style="font-size:18px;">🌿</span>
+              <div>
+                <strong style="font-size:12px; display:block;">3. Canopy</strong>
+                <span style="font-size:10.5px; color:var(--text-muted);">✓ Crown verified</span>
+              </div>
+            </div>
+            <div class="photo-box" id="photoBox4">
+              <span style="font-size:18px;" id="photoIcon4">🔍</span>
+              <div>
+                <strong style="font-size:12px; display:block;">4. The Concern</strong>
+                <span style="font-size:10.5px; color:var(--text-muted);" id="photoStatus4">✓ Defect focused</span>
+              </div>
+            </div>
+          </div>
+          <div id="blurWarningBar" style="display:none; background:#FFF5F5; border:1px solid var(--sdp-red); color:#A61E22; padding:8px 10px; border-radius:8px; font-size:11.5px; font-weight:700; justify-content:space-between; align-items:center;">
+            <span>⚠️ Quality Check: Photo #4 is blurry! Please retake before sending.</span>
+            <button onclick="fixBlurryPhoto()" style="background:var(--sdp-red); color:#fff; border:none; padding:4px 9px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">Retake Photo</button>
+          </div>
+        </div>
+
+        <!-- 3. What You Noticed -->
+        <div>
+          <strong style="font-size:13px; color:var(--olive-dark); display:block;">3. What Warning Signs Did You Notice?</strong>
+          <div>
+            <button class="cue-btn active" onclick="toggleDefectCue(this, 'Leaning tree')">📐 Leaning tree</button>
+            <button class="cue-btn active" onclick="toggleDefectCue(this, 'Lifted roots')">🌱 Lifted roots</button>
+            <button class="cue-btn" onclick="toggleDefectCue(this, 'Trunk cracks / wound')">🪵 Trunk cracks / wound</button>
+            <button class="cue-btn" onclick="toggleDefectCue(this, 'Dead branches')">🍂 Dead branches</button>
+          </div>
+        </div>
+
+        <button class="primary-cta" onclick="submitCitizenReport()">
+          🚀 Send Citizen Report & Update Neighborhood Map
+        </button>
+      </div>
+
+      <!-- Right Column: Real-Time AI Computer Vision & Triage Output -->
+      <div class="panel-card" style="background:var(--olive-dark); color:#F4F5EE; display:flex; flex-direction:column; justify-content:space-between;">
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <span class="sage-pill" style="background:var(--sdp-orange);">Step 2: Instant AI Report Preview</span>
+            <span style="font-size:11px; color:var(--sage-light);">Privacy: Faces & Plates Auto-Blurred</span>
+          </div>
+          <h3 style="font-family:'Fraunces',serif; font-size:20px; color:#fff;">AI Visual Defect & Risk Triage</h3>
+          <p style="font-size:12px; color:var(--sage-light); margin-top:2px;">
+            AI checks guided photos for visible cues, adds surroundings (15m fall zone) and weather forecast.
+          </p>
+
+          <!-- Simulated Computer Vision Viewport -->
+          <div style="background:#1A2316; border:1.5px solid var(--sage-pill); border-radius:16px; padding:14px; margin:14px 0; display:grid; grid-template-columns:130px 1fr; gap:14px; align-items:center;">
+            <svg viewBox="0 0 120 120" width="120" height="120" style="background:#25311F; border-radius:12px;">
+              <circle cx="62" cy="40" r="28" fill="#3B5230" />
+              <circle cx="44" cy="48" r="18" fill="#4E5E42" />
+              <circle cx="78" cy="46" r="18" fill="#4E5E42" />
+              <path d="M50 105 L58 54 L68 54 L62 105 Z" fill="#8D6E63" />
+              <!-- Bounding Boxes -->
+              <rect x="46" y="52" width="28" height="36" fill="none" stroke="#F58220" stroke-width="2" stroke-dasharray="4,2" />
+              <rect x="38" y="92" width="42" height="16" fill="none" stroke="#D9232A" stroke-width="2" />
+              <text x="8" y="16" fill="#8CE99A" font-size="9" font-weight="bold">CV CONFIDENCE: 93%</text>
+            </svg>
+            <div>
+              <div style="font-size:11px; color:var(--sage-light); text-transform:uppercase; font-weight:700;">Detected Visible Cues</div>
+              <div id="cvCuesList" style="font-size:13.5px; font-weight:800; color:#FFE066; margin:4px 0;">
+                Leaning tree, Lifted roots
+              </div>
+              <div style="font-size:11.5px; color:#E2E8D8; line-height:1.4;">
+                • <strong>15m Fall Zone:</strong> Roadside Parking & Footpath<br>
+                • <strong>Tree Owner Routed:</strong> <span id="cvOwnerText">SDP Township Management</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Formula Box -->
+          <div style="background:rgba(255,255,255,0.08); border-radius:14px; padding:12px 14px; margin-bottom:12px;">
+            <div style="font-size:11px; color:var(--sage-light); font-weight:700;">TRANSPARENT RISK FORMULA</div>
+            <div style="font-size:14px; font-weight:800; color:#fff; margin:4px 0;">
+              Risk = Likelihood × Consequence × Storm Factor
+            </div>
+            <div id="cvFormulaCalc" style="font-size:12px; color:#8CE99A; font-weight:700;">
+              Likelihood (4.2) × Consequence (4.5) × Storm (1.45) = 86 / 100 (HIGH RISK)
+            </div>
+          </div>
+        </div>
+
+        <div style="background:rgba(217, 35, 42, 0.22); border:1px solid #FF8787; border-radius:12px; padding:10px 12px; font-size:11.5px; color:#FFD8D8;">
+          <strong>⚠️ Limits & Human-in-the-Loop Safety:</strong> Photos cannot show internal decay. AI never clears a tree on its own—it suggests <em>Monitor</em>, <em>Handler Check</em>, or <em>Arborist Escalation</em>.
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SCREEN 2: 15m FALL ZONE & COMMUNITY MAP
+         ========================================== -->
+    <section class="proto-screen" id="pscreen-2">
+      <!-- Interactive Township SVG Map -->
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>Neighborhood Safety Map & 15m Fall Zones</span>
+          <button onclick="toggleMapFallZones()" style="background:var(--olive-dark); color:#fff; border:none; padding:5px 11px; border-radius:999px; font-size:11px; font-weight:700; cursor:pointer;">
+            ⭕ Toggle 15m Fall Zone
+          </button>
+        </div>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">
+          Click any tree pin to inspect how many residents reported it, its 15m fall radius, and its live risk score.
+        </p>
+
+        <div style="border:2px solid var(--border); border-radius:16px; overflow:hidden; position:relative; height:340px; background:#DCE4D2;">
+          <svg id="townshipMapSvg" viewBox="0 0 500 320" width="100%" height="100%">
+            <!-- Roads -->
+            <rect x="0" y="130" width="500" height="48" fill="#C4CEB8" />
+            <line x1="0" y1="154" x2="500" y2="154" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="12,8" />
+            <text x="16" y="148" fill="#2C3825" font-size="10" font-weight="bold">PERSIARAN SHOREA (MAIN ROAD & ROADSIDE PARKING)</text>
+
+            <rect x="240" y="0" width="38" height="320" fill="#CFD8C4" />
+            <text x="252" y="65" fill="#4E5E42" font-size="9" font-weight="bold" transform="rotate(90 252,65)">TOWNSHIP JOGGING TRACK</text>
+
+            <!-- Township Zones -->
+            <rect x="28" y="26" width="140" height="75" rx="10" fill="#B8C7A8" stroke="#7D9165" stroke-width="1.5" />
+            <text x="45" y="66" fill="#2C3825" font-size="11" font-weight="bold">ELMINA RESIDENCES</text>
+
+            <rect x="305" y="200" width="160" height="90" rx="10" fill="#B8C7A8" stroke="#7D9165" stroke-width="1.5" />
+            <text x="325" y="248" fill="#2C3825" font-size="11" font-weight="bold">CENTRAL PLAYGROUND</text>
+
+            <g id="svgTreeNodes"></g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Selected Tree Score Breakdown & Community Counter -->
+      <div class="panel-card" id="mapDetailPanel">
+        <!-- Populated dynamically by JS -->
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SCREEN 3: LIVE WEATHER & STORM RE-RANKER
+         ========================================== -->
+    <section class="proto-screen" id="pscreen-3">
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>Pre-Storm Weather Sliders</span>
+          <span class="sage-pill">Dynamic Re-Ranking</span>
+        </div>
+        <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:12px;">
+          Adjust live/forecast wind and rainfall sliders to see how <strong>Risk = Likelihood × Consequence × Storm factor</strong> dynamically re-ranks which trees are most dangerous.
+        </p>
+
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px;">
+          <button class="cue-btn" onclick="applyStormPreset(15, 10)">☀️ Calm Weather</button>
+          <button class="cue-btn active" onclick="applyStormPreset(40, 60)">🌧️ Monsoon Rain</button>
+          <button class="cue-btn" onclick="applyStormPreset(72, 95)" style="border-color:var(--sdp-red); color:var(--sdp-red);">⛈️ Severe Squall</button>
+        </div>
+
+        <div style="margin:14px 0;">
+          <label style="display:flex; justify-content:space-between; font-size:13px; font-weight:700; margin-bottom:6px;">
+            <span>💨 Wind Gust Forecast</span>
+            <strong id="stormWindLabel" style="color:var(--olive-dark);">40 km/h</strong>
+          </label>
+          <input type="range" id="stormWindInput" min="5" max="85" value="40" oninput="refreshStormRanking()" style="width:100%; accent-color:var(--olive-main);" />
+        </div>
+
+        <div style="margin:14px 0;">
+          <label style="display:flex; justify-content:space-between; font-size:13px; font-weight:700; margin-bottom:6px;">
+            <span>🌧️ 24h Rainfall & Soil Saturation</span>
+            <strong id="stormRainLabel" style="color:var(--olive-dark);">60 mm</strong>
+          </label>
+          <input type="range" id="stormRainInput" min="0" max="100" value="60" oninput="refreshStormRanking()" style="width:100%; accent-color:var(--olive-main);" />
+        </div>
+
+        <div style="background:var(--olive-dark); color:#fff; padding:14px; border-radius:14px; margin-top:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:12px; color:var(--sage-light);">Active Storm Multiplier:</span>
+            <strong id="stormMultDisplay" style="font-size:18px; color:#FFE066;">×1.70</strong>
+          </div>
+          <p style="font-size:11.5px; color:#D5DEC8; margin-top:6px;">
+            Citizens see live storm danger warnings on their map; Handlers see which trees to inspect first before the storm hits.
+          </p>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>Live Storm Priority Watchlist</span>
+          <span style="font-size:11.5px; color:var(--sdp-red); font-weight:800;">Which tree do we check first?</span>
+        </div>
+        <div id="stormWatchlistContainer" style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
+          <!-- Populated dynamically by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SCREEN 4: CLOSED-LOOP STATUS & HANDLER QUEUE
+         ========================================== -->
+    <section class="proto-screen" id="pscreen-4">
+      <div class="panel-card">
+        <div class="panel-title">
+          <span id="queuePanelHeading">Resident Closed-Loop Tracker & Triage Queue</span>
+          <span class="sage-pill">100% Citizen Updates</span>
+        </div>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">
+          Every tree moves across 4 transparent stages: <strong>Reported → Scheduled → Inspected → Mitigated</strong>. Click any stage button below to simulate a handler or certified arborist update!
+        </p>
+        <div id="queueCardsContainer" style="display:flex; flex-direction:column; gap:10px;">
+          <!-- Populated dynamically by JS -->
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>Pilot KPIs & Arborist Validation</span>
+          <span class="sage-pill">3-Month Pilot Target</span>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:10px;">
+          <div style="background:var(--bg-cream); border:1px solid var(--border); border-radius:12px; padding:12px;">
+            <strong style="font-size:20px; color:var(--olive-dark);">100%</strong>
+            <span style="display:block; font-size:11.5px; color:var(--text-muted);">Citizens given a status update</span>
+          </div>
+          <div style="background:var(--bg-cream); border:1px solid var(--border); border-radius:12px; padding:12px;">
+            <strong style="font-size:20px; color:var(--olive-dark);">&lt; 2 mins</strong>
+            <span style="display:block; font-size:11.5px; color:var(--text-muted);">At least 80% of citizen reports</span>
+          </div>
+          <div style="background:var(--bg-cream); border:1px solid var(--border); border-radius:12px; padding:12px;">
+            <strong style="font-size:20px; color:var(--olive-dark);">≥ 90%</strong>
+            <span style="display:block; font-size:11.5px; color:var(--text-muted);">Recall of arborist high-risk trees</span>
+          </div>
+          <div style="background:var(--bg-cream); border:1px solid var(--border); border-radius:12px; padding:12px;">
+            <strong style="font-size:20px; color:var(--olive-dark);">50% Faster</strong>
+            <span style="display:block; font-size:11.5px; color:var(--text-muted);">Time from report to inspection</span>
+          </div>
+        </div>
+
+        <div style="background:var(--bg-soft); border-radius:14px; padding:14px; margin-top:14px; font-size:12px; line-height:1.5;">
+          <strong style="color:var(--olive-dark); display:block; margin-bottom:4px;">🌳 How Citizen & Handler Views Connect:</strong>
+          1. <strong>Citizen scans</strong> a worrying tree & checks neighborhood 15m fall zones.<br>
+          2. <strong>AI summarises</strong> visible cues & merges duplicate neighbor reports.<br>
+          3. <strong>Handler triages</strong> the storm-ranked queue & does a quick visual check.<br>
+          4. <strong>Certified Arborist</strong> is called only for escalated cases, and the citizen gets notified of the outcome.
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ====================================================================================
+       MODE 2: 13-SLIDE HACKATHON PITCH DECK (SIME DARBY BOTANICAL OLIVE THEME)
+       ==================================================================================== -->
+  <main class="main-view" id="view-deck">
+
+    <div class="deck-controls">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button class="cue-btn" onclick="changeSlide(-1)">← Previous Slide</button>
+        <button class="cue-btn active" onclick="changeSlide(1)">Next Slide →</button>
+      </div>
+      <div style="font-size:13px; font-weight:800; color:var(--olive-dark);" id="slideCounterText">
+        Slide 1 of 13
+      </div>
+      <select id="slideJumpSelect" onchange="jumpToSlide(this.value)" style="padding:7px 12px; border-radius:10px; border:1.5px solid var(--olive-main); font-weight:700; font-size:12px;">
+        <option value="0">1. Cover & Team Panji-Panji Utara</option>
+        <option value="1">2. The Problem</option>
+        <option value="2">3. Target User</option>
+        <option value="3">4. Our Solution</option>
+        <option value="4">5. Innovation</option>
+        <option value="5">6. How It Works</option>
+        <option value="6">7. Impact</option>
+        <option value="7">8. Feasibility & Economics</option>
+        <option value="8">9. Implementation Timeline</option>
+        <option value="9">10. Why Our Team Should Win</option>
+        <option value="10">11. Appendix A: Visual Concept</option>
+        <option value="11">12. Appendix B: References</option>
+        <option value="12">13. Thank You</option>
+      </select>
+    </div>
+
+    <!-- SLIDE 1: COVER & TEAM INFORMATION -->
+    <div class="slide-card active">
+      <div>
+        <div class="slide-header-tag">SIME DARBY PROPERTY UNIVERSITY HACKATHON 2026 | PLANET | CLIMATE RESILIENCE</div>
+        <h2 class="slide-h1">TreeWatch Township</h2>
+        <p style="font-size:16px; color:var(--olive-main); font-weight:600; margin-bottom:20px;">
+          Pre-storm tree risk triage for township teams, with residents as the eyes on the ground
+        </p>
+
+        <table class="deck-table">
+          <tr><th>Team Name</th><td><strong>Panji-Panji Utara</strong></td></tr>
+          <tr><th>Team Leader</th><td>Amir Hakimi bin Kamarusshahrin</td></tr>
+          <tr><th>University</th><td>Universiti Teknologi MARA (UiTM)</td></tr>
+          <tr><th>Team Members</th><td>Ahmad Zuhaier bin Zaharun • Nuraisyah Afrina binti Mohd Jamil • Nur Zahra binti Rameli</td></tr>
+          <tr><th>Email & Contact</th><td>2025125173@student.uitm.edu.my | 011-3543 0699</td></tr>
+        </table>
+      </div>
+      <div class="slide-footer">
+        <span>Sime Darby Property University Hackathon 2026</span>
+        <span>Slide 1 / 13</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: THE PROBLEM -->
+    <div class="slide-card olive-theme">
+      <div>
+        <div class="slide-header-tag">1. THE PROBLEM</div>
+        <h2 class="slide-h1">Teams cannot inspect every tree—so which tree do we check first?</h2>
+        <div class="botanical-grid-2" style="color:var(--text-main);">
+          <div class="botanical-box">
+            <strong style="font-size:28px; color:var(--sdp-red);">4,825 Cases (2023)</strong>
+            <p style="font-size:13px; margin-top:4px;">Falling tree or branch cases in 2023, <strong>up 57%</strong> from 3,081 in 2021. Caused <strong>10 deaths and 47 injuries</strong> in 2023.</p>
+          </div>
+          <div class="botanical-box">
+            <strong style="font-size:28px; color:var(--olive-dark);">~150 vs ~400</strong>
+            <p style="font-size:13px; margin-top:4px;">Few experts: about <strong>150 ISA-certified arborists</strong> in Malaysia, versus about 400 in Singapore.</p>
+          </div>
+          <div class="botanical-box">
+            <strong style="font-size:16px; color:var(--olive-dark);">No Required Inventory & Unstructured Reports</strong>
+            <p style="font-size:13px; margin-top:4px;">Local authorities are not obliged to keep a tree inventory. Residents report by message with no photo, location, or priority.</p>
+          </div>
+          <div class="botanical-box">
+            <strong style="font-size:16px; color:var(--olive-dark);">Screening Alone Is Not Enough</strong>
+            <p style="font-size:13px; margin-top:4px;">Even Penang's AI flags (167 trees) still require an on-site inspection.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Sources: Soon (2024); New Straits Times (2024); Free Malaysia Today (2026)</span>
+        <span>Slide 2 / 13</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: TARGET USER -->
+    <div class="slide-card">
+      <div>
+        <div class="slide-header-tag">2. TARGET USER</div>
+        <h2 class="slide-h1">Citizens scan. Handlers triage. Arborists decide when needed.</h2>
+        <div class="botanical-grid-3">
+          <div class="botanical-box">
+            <span class="sage-pill">Primary: Citizens</span>
+            <h3 style="margin:10px 0 6px; font-size:16px;">Residents on the Ground</h3>
+            <p style="font-size:13px; color:var(--text-muted);">Notice a leaning tree, cracks, dead branches, or lifted roots. <strong>Challenge:</strong> No quick way to report, no proof they were heard, unsure how serious it is.</p>
+          </div>
+          <div class="botanical-box">
+            <span class="sage-pill">Secondary: Township Handlers</span>
+            <h3 style="margin:10px 0 6px; font-size:16px;">Management & Landscape Teams</h3>
+            <p style="font-size:13px; color:var(--text-muted);">Receive and act on reports. <strong>Challenge:</strong> Unstructured messages, no priority ranking, and scarce arborist time.</p>
+          </div>
+          <div class="botanical-box">
+            <span class="sage-pill">Escalation: Arborists</span>
+            <h3 style="margin:10px 0 6px; font-size:16px;">ISA-Certified Experts</h3>
+            <p style="font-size:13px; color:var(--text-muted);">Called in by the handler when needed. <strong>Challenge:</strong> Should only see the cases that really need an expert.</p>
+          </div>
+        </div>
+        <p style="font-size:13px; background:var(--bg-soft); padding:10px 14px; border-radius:12px;">
+          <strong>Ownership Routing:</strong> Tree ownership differs by location (developer, management body, or council), so each report is routed to the tree's owner (to confirm with SDP).
+        </p>
+      </div>
+      <div class="slide-footer">
+        <span>TreeWatch Township • Target User Chain</span>
+        <span>Slide 3 / 13</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: OUR SOLUTION -->
+    <div class="slide-card">
+      <div>
+        <div class="slide-header-tag">3. OUR SOLUTION</div>
+        <h2 class="slide-h1">Citizens report. AI summarises. Handlers triage. Arborists decide.</h2>
+        <div class="botanical-grid-2">
+          <div class="botanical-box">
+            <strong>1. Scan and Report</strong>
+            <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Citizen opens the app, scans the tree with guided photos, and sends a concern. GPS tags it automatically.</p>
+          </div>
+          <div class="botanical-box">
+            <strong>2. AI Report</strong>
+            <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">AI checks the photos for visible warning signs and adds the tree's surroundings and the weather forecast.</p>
+          </div>
+          <div class="botanical-box">
+            <strong>3. Handler Triage</strong>
+            <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Handler sees a ranked report with photos, risk tier, and a suggested next step, then decides.</p>
+          </div>
+          <div class="botanical-box">
+            <strong>4. Arborist If Needed</strong>
+            <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Only escalated cases go to a certified arborist. The citizen is told the outcome.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Mobile-first prototype: https://claude.ai/artifact/96cw7Z7vTtdkzkapmeUt9u</span>
+        <span>Slide 4 / 13</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: INNOVATION -->
+    <div class="slide-card">
+      <div>
+        <div class="slide-header-tag">4. INNOVATION</div>
+        <h2 class="slide-h1">Our Edge: Storm-Triggered Re-Ranking & Human-in-the-Loop</h2>
+        <table class="deck-table">
+          <thead>
+            <tr><th>Existing Approach</th><th>Limitation</th><th>TreeWatch Township</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Satellite AI screening (Penang, 167 trees flagged)</td><td>City-scale; each tree still needs a site visit</td><td><strong>Township workflow with resident reports</strong></td></tr>
+            <tr><td>Tree inventories (Penang, Kuala Lumpur)</td><td>Catalogue only; not mandatory for councils</td><td><strong>Light register plus triage and storm ranking</strong></td></tr>
+            <tr><td>Sensor prototype (Universiti Malaya, 2025)</td><td>Hardware on every tree is costly to scale</td><td><strong>Phone-based, no hardware</strong></td></tr>
+            <tr><td>Radar and LiDAR research</td><td>Specialised equipment and data</td><td><strong>Decides where such tools are used first</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="slide-footer">
+        <span>Sources: Free Malaysia Today (2026); Malay Mail (2024a); Bernama (2024); James Dyson Foundation (2025); Mohd Yusof et al. (2024)</span>
+        <span>Slide 5 / 13</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: HOW IT WORKS -->
+    <div class="slide-card">
+      <div>
+        <div class="slide-header-tag">5. HOW IT WORKS</div>
+        <h2 class="slide-h1">Risk = Likelihood × Consequence × Storm Factor</h2>
+        <div class="botanical-grid-3">
+          <div class="botanical-box">
+            <strong>Citizen Scan</strong>
+            <p style="font-size:12.5px; color:var(--text-muted); margin-top:4px;">Guided photos: whole tree, trunk base, canopy, and the concern. Quality check asks for a retake if blurry. GPS links report to a tree; duplicates are merged.</p>
+          </div>
+          <div class="botanical-box">
+            <strong>AI Report</strong>
+            <p style="font-size:12.5px; color:var(--text-muted); margin-top:4px;">Detects visible cues (lean, wound, dead branches, lifted roots) with confidence. Calculates Risk formula. Suggests: monitor, handler check, or arborist.</p>
+          </div>
+          <div class="botanical-box">
+            <strong>Handler, Then Arborist</strong>
+            <p style="font-size:12.5px; color:var(--text-muted); margin-top:4px;">Handler reviews ranked queue & storm watchlist, does a quick visual check, then escalates. Arborist gives final rating. Citizen gets updates.</p>
+          </div>
+        </div>
+        <div class="botanical-grid-2">
+          <div class="botanical-box">
+            <strong>Validation:</strong> An arborist rates ~100 trees. Target recall ≥90% for high-risk trees and ≥50% confirmed escalations.
+          </div>
+          <div class="botanical-box">
+            <strong>Limits & Safety:</strong> Photos cannot show internal decay. AI never clears a tree on its own. Emergency warning if falling/blocking road.
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Sources: Srivanit and Kaewkhow (2024); Velasquez-Camacho et al. (2023); Soon (2024)</span>
+        <span>Slide 6 / 13</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: IMPACT -->
+    <div class="slide-card">
+      <div>
+        <div class="slide-header-tag">6. IMPACT</div>
+        <h2 class="slide-h1">Measurable Pilot Targets Across All Stakeholders</h2>
+        <table class="deck-table">
+          <thead>
+            <tr><th>Key Indicator</th><th>Pilot Target</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Citizen report completed in under 2 minutes</td><td><strong>At least 80% of reports</strong></td></tr>
+            <tr><td>Time from report to inspection</td><td><strong>50% faster than baseline</strong></td></tr>
+            <tr><td>High-risk trees inspected before storm season</td><td><strong>At least 80%</strong></td></tr>
+            <tr><td>Recall of arborist-confirmed high-risk trees</td><td><strong>At least 90%</strong></td></tr>
+            <tr><td>Escalations to arborists confirmed as needed</td><td><strong>At least 50%</strong></td></tr>
+            <tr><td>Citizens given a status update</td><td><strong>100%</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="slide-footer">
+        <span>Targets are planning assumptions to be validated in the pilot.</span>
+        <span>Slide 7 / 13</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: FEASIBILITY -->
+    <div class="slide-card">
+      <div>
+        <div class="slide-header-tag">7. FEASIBILITY</div>
+        <h2 class="slide-h1">Technical, Policy & Economic Viability</h2>
+        <div class="botanical-grid-3">
+          <div class="botanical-box">
+            <strong>Can We Build It?</strong>
+            <p style="font-size:12.5px; color:var(--text-muted); margin-top:4px;">Phone-based web app, transparent rules first, photo AI as an assistant. No hardware. Working prototype already shows the flow.</p>
+          </div>
+          <div class="botanical-box">
+            <strong>Does Policy Support It?</strong>
+            <p style="font-size:12.5px; color:var(--text-muted); margin-top:4px;">The Minister urges councils to build inventories and employ arborists, and the National Landscape Department asks the public to report unsafe trees.</p>
+          </div>
+          <div class="botanical-box">
+            <strong>What Could Go Wrong?</strong>
+            <p style="font-size:12.5px; color:var(--text-muted); margin-top:4px;">False/duplicate reports merged by tree & reviewed by handler. AI never clears a tree. Privacy: minimal data, blurred faces & plates.</p>
+          </div>
+        </div>
+        <div style="background:var(--olive-dark); color:#fff; padding:14px 18px; border-radius:14px; font-size:13px;">
+          <strong>Illustrative Economics:</strong> Net benefit about <strong>RM25,200 a year</strong> | <strong>Pilot Budget: RM4,180</strong> (Assumes 2 incidents avoided at RM15,000, 120 inspection hours saved at RM60, platform cost RM12,000).
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Sources: Bernama (2024); Malay Mail (2024b)</span>
+        <span>Slide 8 / 13</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: IMPLEMENTATION -->
+    <div class="slide-card">
+      <div>
+        <div class="slide-header-tag">8. IMPLEMENTATION</div>
+        <h2 class="slide-h1">Hackathon & Township Rollout Roadmap</h2>
+        <table class="deck-table">
+          <thead>
+            <tr><th>When</th><th>Milestone</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>By 23 Oct</strong></td><td>Submit deck, 5-minute demo video and prototype link</td></tr>
+            <tr><td><strong>24 to 28 Oct</strong></td><td>Evaluation; Top 10 announced on 28 Oct</td></tr>
+            <tr><td><strong>2 to 6 Nov</strong></td><td>Mentoring sprint: calibrate thresholds with an arborist</td></tr>
+            <tr><td><strong>11 and 14 Nov</strong></td><td>Final submission; pitch to judges</td></tr>
+            <tr><td><strong>Pilot, 3 months</strong></td><td>One township zone, 500 to 1,000 trees, baseline versus TreeWatch</td></tr>
+            <tr><td><strong>Rollout, 6 months</strong></td><td>Whole township with storm-season drills</td></tr>
+            <tr><td><strong>Scale, 12 months</strong></td><td>More townships; optional sensors for the highest-risk trees</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="slide-footer">
+        <span>Dates follow the organiser's timeline. Pilot figures are plans, not results.</span>
+        <span>Slide 9 / 13</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: WHY OUR TEAM SHOULD WIN -->
+    <div class="slide-card olive-theme">
+      <div>
+        <div class="slide-header-tag">9. WHY OUR TEAM SHOULD WIN</div>
+        <h2 class="slide-h1">Protecting Sime Darby Property's Green Assets Without Blanket Felling</h2>
+        <div style="background:rgba(255,255,255,0.1); border-left:6px solid var(--sdp-orange); padding:22px; border-radius:16px; font-size:15.5px; line-height:1.65;">
+          Falling trees are rising, arborists are scarce, and townships cannot see which trees worry residents. <strong>TreeWatch turns every resident into a sensor:</strong> they scan a tree, an AI report reaches the township handler, and an arborist is called only when needed. It needs no hardware, works on any phone, and a working prototype already demonstrates the flow. Targets are measurable in a three-month pilot: faster inspections, more high-risk trees checked before storms, and fewer unnecessary arborist visits.
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Team Panji-Panji Utara • Universiti Teknologi MARA</span>
+        <span>Slide 10 / 13</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 11: APPENDIX A: VISUAL CONCEPT -->
+    <div class="slide-card">
+      <div>
+        <div class="slide-header-tag">APPENDIX A: VISUAL CONCEPT</div>
+        <h2 class="slide-h1">Four Core Modules (Click to Launch Live Prototype)</h2>
+        <div class="botanical-grid-2">
+          <div class="botanical-box" style="cursor:pointer;" onclick="switchGlobalMode('proto'); openProtoTab(1);">
+            <span class="sage-pill">1. Report</span>
+            <p style="font-size:13px; margin-top:6px;">Citizen flow in three steps: where, what you noticed, send. Guided AI scan with quality check.</p>
+          </div>
+          <div class="botanical-box" style="cursor:pointer;" onclick="switchGlobalMode('proto'); openProtoTab(2);">
+            <span class="sage-pill">2. Map</span>
+            <p style="font-size:13px; margin-top:6px;">Trees coloured by risk, a 15 m fall zone, community report counter, and score breakdown for each tree.</p>
+          </div>
+          <div class="botanical-box" style="cursor:pointer;" onclick="switchGlobalMode('proto'); openProtoTab(3);">
+            <span class="sage-pill">3. Storm List</span>
+            <p style="font-size:13px; margin-top:6px;">Wind and rain sliders re-rank the trees that residents should avoid and handlers should check first.</p>
+          </div>
+          <div class="botanical-box" style="cursor:pointer;" onclick="switchGlobalMode('proto'); openProtoTab(4);">
+            <span class="sage-pill">4. Queue</span>
+            <p style="font-size:13px; margin-top:6px;">Reported, Scheduled, Inspected, Mitigated, with KPIs, arborist escalation, and 100% citizen updates.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Click any card above to jump directly to that live screen in the prototype!</span>
+        <span>Slide 11 / 13</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 12: APPENDIX B: REFERENCES -->
+    <div class="slide-card">
+      <div>
+        <div class="slide-header-tag">APPENDIX B: REFERENCES</div>
+        <h2 class="slide-h1" style="font-size:26px;">Academic, Policy & Industry Citations</h2>
+        <div style="font-size:12px; line-height:1.55; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="botanical-box">
+            • <strong>Soon, L. W. (2024, July 3).</strong> Conduct regular inspections to minimise risk of tree failure in urban areas, experts. <em>Bernama</em>.<br><br>
+            • <strong>New Straits Times. (2024, May 26).</strong> Municipal tree care: Inventory, arborists, way forward.<br><br>
+            • <strong>Bernama. (2024, May 26).</strong> Local authorities encouraged to employ arborists, Nga.<br><br>
+            • <strong>Free Malaysia Today. (2026, May 5).</strong> Penang council flags 167 at-risk trees with AI's help.<br><br>
+            • <strong>Malay Mail. (2024a, May 23).</strong> Penang Island City Council establishes tree inventory system.
+          </div>
+          <div class="botanical-box">
+            • <strong>Malay Mail. (2024b, July 23).</strong> Planting native species key to preventing tree and branch falls.<br><br>
+            • <strong>James Dyson Foundation. (2025).</strong> Tree fall risk mitigation system [James Dyson Award].<br><br>
+            • <strong>Srivanit, M., & Kaewkhow, S. (2024).</strong> A machine learning-based protocol to support visual tree assessment. <em>Urban Forestry & Urban Greening</em>, 99, 128420.<br><br>
+            • <strong>Mohd Yusof, M. L. et al. (2024).</strong> Deep learning-augmented stand-off radar scheme. <em>IEEE TGRS</em>, 62.<br><br>
+            • <strong>Velasquez-Camacho, L. et al. (2023).</strong> Deep learning for urban tree detection. <em>CEUS</em>, 105, 102025.
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Sime Darby Property Berhad (2026) — Township of Tomorrow, University Hackathon 2026</span>
+        <span>Slide 12 / 13</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 13: THANK YOU -->
+    <div class="slide-card olive-theme" style="text-align:center; justify-content:center; align-items:center;">
+      <div>
+        <div class="slide-header-tag">SIME DARBY PROPERTY UNIVERSITY HACKATHON 2026</div>
+        <h2 class="slide-h1" style="font-size:44px; margin:12px 0;">Thank You</h2>
+        <p style="font-size:20px; color:#FFE066; font-weight:700; margin-bottom:24px;">
+          TreeWatch Township: Which tree do we check first?
+        </p>
+        <button class="primary-cta" style="max-width:340px; margin:0 auto; background:linear-gradient(135deg, var(--sdp-red), var(--sdp-orange));" onclick="switchGlobalMode('proto')">
+          🚀 Launch Live Interactive System Demo
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // ==========================================
+    // SHARED SYSTEM DATA
+    // ==========================================
+    const townshipTrees = [
+      {
+        id: 'ELM-104',
+        name: 'Angsana (Persiaran Shorea)',
+        zone: 'Roadside Parking Bays #12–#16',
+        x: 145,
+        y: 142,
+        reports: 3,
+        likelihood: 4.2,
+        consequence: 4.5,
+        cues: ['Leaning tree', 'Lifted roots'],
+        owner: 'SDP Township Management',
+        stage: 2, // 1: Reported, 2: Scheduled, 3: Inspected (Arborist), 4: Mitigated
+        residentNote: 'Avoid parking in Bays #12–#16 during strong wind gusts.'
+      },
+      {
+        id: 'ELM-209',
+        name: 'Rain Tree (Central Park South)',
+        zone: 'Next to Children Playground Bench',
+        x: 340,
+        y: 225,
+        reports: 6,
+        likelihood: 4.6,
+        consequence: 4.8,
+        cues: ['Trunk cracks / wound', 'Dead branches'],
+        owner: 'SDP Township Management',
+        stage: 3,
+        residentNote: '15m fall zone overlaps playground walkway. Escalated to ISA Arborist.'
+      },
+      {
+        id: 'ELM-088',
+        name: 'Yellow Flame (Jogging Track)',
+        zone: 'Footpath Sector B',
+        x: 255,
+        y: 82,
+        reports: 2,
+        likelihood: 2.7,
+        consequence: 3.1,
+        cues: ['Dead branches'],
+        owner: 'Resident JMB',
+        stage: 1,
+        residentNote: 'Minor upper canopy twigs; handler visual check queued.'
+      },
+      {
+        id: 'ELM-312',
+        name: 'Tembusu (Greenbelt Lawn)',
+        zone: 'Open Park Lawn',
+        x: 90,
+        y: 255,
+        reports: 1,
+        likelihood: 1.7,
+        consequence: 2.0,
+        cues: ['Routine check'],
+        owner: 'Local Council (MBSA)',
+        stage: 4,
+        residentNote: 'Mitigated: Unsafe branches pruned and cleared last week.'
+      }
+    ];
+
+    let activeTreeId = 'ELM-104';
+    let showFallRadius = true;
+    let selectedCues = ['Leaning tree', 'Lifted roots'];
+    let currentPerspective = 'resident';
+    let currentSlideIndex = 0;
+
+    // ==========================================
+    // GLOBAL MODE & PERSPECTIVE SWITCHING
+    // ==========================================
+    function switchGlobalMode(mode) {
+      document.getElementById('view-proto').classList.toggle('active', mode === 'proto');
+      document.getElementById('view-deck').classList.toggle('active', mode === 'deck');
+      document.getElementById('btn-mode-proto').classList.toggle('active', mode === 'proto');
+      document.getElementById('btn-mode-deck').classList.toggle('active', mode === 'deck');
+    }
+
+    function switchUserPerspective(role) {
+      currentPerspective = role;
+      document.getElementById('roleBtnResident').classList.toggle('active', role === 'resident');
+      document.getElementById('roleBtnHandler').classList.toggle('active', role === 'handler');
+      const heading = document.getElementById('activeRoleHeading');
+      if (role === 'resident') {
+        heading.textContent = 'Primary User: Resident Public Safety & Tree Reporting App';
+        triggerToast('Resident View Active', 'Showing citizen scan, community report counter, 15m fall zones & live storm alerts.');
+      } else {
+        heading.textContent = 'Secondary User: Township Handler Triage & Arborist Escalation';
+        triggerToast('Handler Command View Active', 'Showing triage queue controls and ISA-certified arborist dispatch.');
+      }
+      renderQueueCards();
+    }
+
+    function openProtoTab(num) {
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById('pscreen-' + i).classList.toggle('active', i === num);
+        document.getElementById('ptab-btn-' + i).classList.toggle('active', i === num);
+      }
+      if (num === 2) {
+        renderTownshipMap();
+        renderMapDetailPanel();
+      } else if (num === 3) {
+        refreshStormRanking();
+      } else if (num === 4) {
+        renderQueueCards();
+      }
+    }
+
+    // ==========================================
+    // SCREEN 1: CITIZEN SCAN LOGIC
+    // ==========================================
+    function updateScanTreeSelection() {
+      const val = document.getElementById('scanTreeSelect').value;
+      const banner = document.getElementById('duplicateMergeBanner');
+      const ownerTxt = document.getElementById('cvOwnerText');
+      if (val === 'ELM-104') {
+        banner.innerHTML = '🤝 <strong>Duplicate Merger Active:</strong> 3 neighbors already reported #ELM-104. Your photos will merge into the same tree ticket!';
+        ownerTxt.textContent = 'SDP Township Management';
+      } else if (val === 'ELM-209') {
+        banner.innerHTML = '🤝 <strong>Duplicate Merger Active:</strong> 6 neighbors already reported #ELM-209. Escalated priority!';
+        ownerTxt.textContent = 'SDP Township Management';
+      } else {
+        banner.innerHTML = '📍 <strong>New GPS Pin (#ELM-405):</strong> Creating new tree entry on the township map and routing to owner.';
+        ownerTxt.textContent = 'Resident JMB / Local Council';
+      }
+    }
+
+    function triggerBlurSimulation() {
+      const box = document.getElementById('photoBox4');
+      box.classList.add('blurry');
+      document.getElementById('photoIcon4').textContent = '⚠️';
+      document.getElementById('photoStatus4').textContent = 'Blurry image detected!';
+      document.getElementById('blurWarningBar').style.display = 'flex';
+    }
+
+    function fixBlurryPhoto() {
+      const box = document.getElementById('photoBox4');
+      box.classList.remove('blurry');
+      document.getElementById('photoIcon4').textContent = '🔍';
+      document.getElementById('photoStatus4').textContent = '✓ Retaken & sharp';
+      document.getElementById('blurWarningBar').style.display = 'none';
+      triggerToast('Quality Check Passed', 'Photo #4 is now sharp and verified for AI defect detection.');
+    }
+
+    function toggleDefectCue(btn, label) {
+      btn.classList.toggle('active');
+      if (selectedCues.includes(label)) {
+        selectedCues = selectedCues.filter(c => c !== label);
+      } else {
+        selectedCues.push(label);
+      }
+      document.getElementById('cvCuesList').textContent = selectedCues.join(', ') || 'General concern';
+    }
+
+    function submitCitizenReport() {
+      const val = document.getElementById('scanTreeSelect').value;
+      if (val === 'NEW') {
+        const existing = townshipTrees.find(t => t.id === 'ELM-405');
+        if (!existing) {
+          townshipTrees.unshift({
+            id: 'ELM-405',
+            name: 'Mahogany (Jalan Elmina U16)',
+            zone: 'Footpath Walkway North',
+            x: 410,
+            y: 85,
+            reports: 1,
+            likelihood: 4.3,
+            consequence: 4.4,
+            cues: [...selectedCues],
+            owner: 'SDP Township Management',
+            stage: 1,
+            residentNote: 'Newly reported by citizen scan. Avoid 15m fall zone during heavy rain.'
+          });
+        } else {
+          existing.reports += 1;
+        }
+        activeTreeId = 'ELM-405';
+        triggerToast('New Report Sent (#ELM-405)', 'Added to Neighborhood 15m Fall Zone Map & Handler Triage Queue!');
+      } else {
+        const t = townshipTrees.find(item => item.id === val);
+        if (t) {
+          t.reports += 1;
+          activeTreeId = t.id;
+          triggerToast(`Report Merged (#${t.id})`, `Merged with neighbor scans! Total community reports: ${t.reports}.`);
+        }
+      }
+      openProtoTab(2);
+    }
+
+    // ==========================================
+    // SCREEN 2: 15m FALL ZONE MAP LOGIC
+    // ==========================================
+    function getStormFactor() {
+      const wind = parseInt(document.getElementById('stormWindInput').value || 40);
+      const rain = parseInt(document.getElementById('stormRainInput').value || 60);
+      return +(1 + (wind / 100) + (rain / 200)).toFixed(2);
+    }
+
+    function calcRisk(tree) {
+      const sf = getStormFactor();
+      const raw = tree.likelihood * tree.consequence * sf;
+      const score = Math.min(99, Math.round(raw * 3.0));
+      const tier = score >= 68 ? 'HIGH' : (score >= 42 ? 'MEDIUM' : 'LOW');
+      return { score, tier, sf };
+    }
+
+    function renderTownshipMap() {
+      const gLayer = document.getElementById('svgTreeNodes');
+      gLayer.innerHTML = '';
+
+      townshipTrees.forEach(tree => {
+        const { score, tier } = calcRisk(tree);
+        const col = tier === 'HIGH' ? '#C92A2A' : (tier === 'MEDIUM' ? '#E67700' : '#2B8A3E');
+        const selected = tree.id === activeTreeId;
+
+        if (showFallRadius) {
+          const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          c.setAttribute('cx', tree.x);
+          c.setAttribute('cy', tree.y);
+          c.setAttribute('r', '42');
+          c.setAttribute('fill', col);
+          c.setAttribute('fill-opacity', selected ? '0.30' : '0.16');
+          c.setAttribute('stroke', col);
+          c.setAttribute('stroke-width', selected ? '2.5' : '1.2');
+          c.setAttribute('stroke-dasharray', '5,3');
+          gLayer.appendChild(c);
+        }
+
+        const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        group.style.cursor = 'pointer';
+        group.onclick = () => {
+          activeTreeId = tree.id;
+          renderTownshipMap();
+          renderMapDetailPanel();
+        };
+
+        const pin = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        pin.setAttribute('cx', tree.x);
+        pin.setAttribute('cy', tree.y);
+        pin.setAttribute('r', selected ? '15' : '12');
+        pin.setAttribute('fill', col);
+        pin.setAttribute('stroke', '#fff');
+        pin.setAttribute('stroke-width', '2.5');
+        group.appendChild(pin);
+
+        const num = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        num.setAttribute('x', tree.x);
+        num.setAttribute('y', tree.y + 4);
+        num.setAttribute('text-anchor', 'middle');
+        num.setAttribute('fill', '#fff');
+        num.setAttribute('font-size', '10');
+        num.setAttribute('font-weight', 'bold');
+        num.textContent = tree.reports;
+        group.appendChild(num);
+
+        const tag = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        tag.setAttribute('x', tree.x);
+        tag.setAttribute('y', tree.y + 28);
+        tag.setAttribute('text-anchor', 'middle');
+        tag.setAttribute('fill', '#222A1D');
+        tag.setAttribute('font-size', '10');
+        tag.setAttribute('font-weight', '800');
+        tag.textContent = `#${tree.id} (${score})`;
+        group.appendChild(tag);
+
+        gLayer.appendChild(group);
+      });
+    }
+
+    function toggleMapFallZones() {
+      showFallRadius = !showFallRadius;
+      renderTownshipMap();
+    }
+
+    function renderMapDetailPanel() {
+      const tree = townshipTrees.find(t => t.id === activeTreeId) || townshipTrees[0];
+      const { score, tier, sf } = calcRisk(tree);
+      const stageNames = ['Reported', 'Scheduled', 'Arborist Inspected', 'Mitigated'];
+
+      document.getElementById('mapDetailPanel').innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div>
+            <span class="risk-badge risk-${tier}">${tier} RISK • ${score}/99 PTS</span>
+            <h3 style="font-family:'Fraunces',serif; font-size:20px; color:var(--olive-dark); margin-top:6px;">
+              🌳 #${tree.id}: ${tree.name}
+            </h3>
+            <p style="font-size:12px; color:var(--text-muted);">${tree.zone} • Routed Owner: <strong>${tree.owner}</strong></p>
+          </div>
+          <div style="background:var(--bg-soft); padding:8px 14px; border-radius:14px; text-align:center;">
+            <strong style="font-size:18px; color:var(--olive-dark); display:block;">👥 ${tree.reports}</strong>
+            <span style="font-size:10px; font-weight:800; color:var(--text-muted);">RESIDENT REPORTS</span>
+          </div>
+        </div>
+
+        <div style="background:#FFF9DB; border:1px solid #FCC419; border-radius:12px; padding:10px 12px; margin:12px 0; font-size:12px; color:#5C4400;">
+          <strong>⭕ 15m Fall Zone Surroundings:</strong> ${tree.residentNote}
+        </div>
+
+        <div style="background:var(--bg-cream); border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:12px;">
+          <div style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Score Breakdown</div>
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px; text-align:center; font-size:12px;">
+            <div style="background:#fff; padding:8px; border-radius:8px;">
+              <span>Likelihood</span><br><strong>${tree.likelihood}/5</strong>
+            </div>
+            <div style="background:#fff; padding:8px; border-radius:8px;">
+              <span>15m Consequence</span><br><strong>${tree.consequence}/5</strong>
+            </div>
+            <div style="background:#fff; padding:8px; border-radius:8px;">
+              <span>Storm Factor</span><br><strong>×${sf}</strong>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+          <span style="font-size:12px; font-weight:700; color:var(--olive-main);">
+            Current Stage: <strong>${stageNames[tree.stage - 1]}</strong>
+          </span>
+          <button onclick="addConfirmVote('${tree.id}')" style="background:var(--olive-main); color:#fff; border:none; padding:9px 14px; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">
+            +1 Confirm Report (${tree.reports})
+          </button>
+        </div>
+      `;
+    }
+
+    function addConfirmVote(id) {
+      const t = townshipTrees.find(item => item.id === id);
+      if (t) {
+        t.reports += 1;
+        renderTownshipMap();
+        renderMapDetailPanel();
+        triggerToast('Community Report Merged', `You confirmed #${t.id}. Total resident reports merged: ${t.reports}.`);
+      }
+    }
+
+    // ==========================================
+    // SCREEN 3: STORM RE-RANKER LOGIC
+    // ==========================================
+    function applyStormPreset(wind, rain) {
+      document.getElementById('stormWindInput').value = wind;
+      document.getElementById('stormRainInput').value = rain;
+      refreshStormRanking();
+    }
+
+    function refreshStormRanking() {
+      const wind = document.getElementById('stormWindInput').value;
+      const rain = document.getElementById('stormRainInput').value;
+      document.getElementById('stormWindLabel').textContent = wind + ' km/h';
+      document.getElementById('stormRainLabel').textContent = rain + ' mm';
+
+      const sf = getStormFactor();
+      document.getElementById('stormMultDisplay').textContent = '×' + sf;
+
+      const ranked = [...townshipTrees].map(t => ({
+        ...t,
+        ...calcRisk(t)
+      })).sort((a, b) => b.score - a.score);
+
+      document.getElementById('stormWatchlistContainer').innerHTML = ranked.map((t, idx) => `
+        <div style="background:var(--bg-cream); border:1.5px solid var(--border); border-radius:14px; padding:12px; display:flex; align-items:center; justify-content:space-between; gap:10px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:30px; height:30px; border-radius:50%; background:${t.tier === 'HIGH' ? 'var(--sdp-red)' : 'var(--olive-main)'}; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px;">
+              #${idx + 1}
+            </div>
+            <div>
+              <strong style="font-size:13.5px; color:var(--olive-dark);">#${t.id} ${t.name}</strong>
+              <span class="risk-badge risk-${t.tier}" style="margin-left:6px;">${t.score} pts</span>
+              <p style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">
+                👥 ${t.reports} resident reports • ${t.residentNote}
+              </p>
+            </div>
+          </div>
+          <button onclick="activeTreeId='${t.id}'; openProtoTab(2);" style="background:#fff; border:1px solid var(--olive-main); color:var(--olive-dark); padding:6px 10px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer; white-space:nowrap;">
+            View 15m Zone →
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // ==========================================
+    // SCREEN 4: QUEUE & 100% CLOSED-LOOP STATUS
+    // ==========================================
+    function renderQueueCards() {
+      const stages = ['1. Reported', '2. Scheduled', '3. Inspected (Arborist)', '4. Mitigated'];
+      const container = document.getElementById('queueCardsContainer');
+
+      container.innerHTML = townshipTrees.map(t => {
+        const { score, tier } = calcRisk(t);
+        return `
+          <div style="background:var(--bg-cream); border:1.5px solid var(--border); border-radius:14px; padding:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong style="font-size:14px; color:var(--olive-dark);">🌳 #${t.id}: ${t.name}</strong>
+                <span style="font-size:11.5px; color:var(--text-muted); margin-left:6px;">(👥 ${t.reports} reports • ${t.owner})</span>
+              </div>
+              <span class="risk-badge risk-${tier}">${tier} (${score})</span>
+            </div>
+
+            <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:10px;">
+              ${stages.map((sName, i) => {
+                const stepNum = i + 1;
+                const active = t.stage === stepNum;
+                const done = t.stage > stepNum;
+                return `
+                  <button onclick="updateTreeStage('${t.id}',${stepNum})" style="padding:7px 4px; border-radius:8px; border:1px solid var(--border); font-size:10.5px; font-weight:700; cursor:pointer; background:${active ? 'var(--sdp-orange)' : (done ? 'var(--olive-main)' : '#fff')}; color:${active || done ? '#fff' : 'var(--text-main)'};">
+                    ${sName}
+                  </button>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateTreeStage(treeId, newStage) {
+      const t = townshipTrees.find(item => item.id === treeId);
+      if (t) {
+        t.stage = newStage;
+        const msgMap = {
+          1: 'Logged in Ranked Handler Queue.',
+          2: 'Handler visual check scheduled before storm.',
+          3: 'Escalated to ISA-Certified Arborist for expert rating.',
+          4: 'Mitigated! Branches pruned safely; 100% of reporting citizens notified.'
+        };
+        renderQueueCards();
+        triggerToast(`Closed-Loop Citizen Update (#${t.id})`, `${msgMap[newStage]} (${t.reports} residents notified)`);
+      }
+    }
+
+    // ==========================================
+    // PITCH DECK NAVIGATION & 5-MIN TIMER
+    // ==========================================
+    function changeSlide(delta) {
+      const slides = document.querySelectorAll('.slide-card');
+      currentSlideIndex = (currentSlideIndex + delta + slides.length) % slides.length;
+      jumpToSlide(currentSlideIndex);
+    }
+
+    function jumpToSlide(idx) {
+      currentSlideIndex = parseInt(idx);
+      const slides = document.querySelectorAll('.slide-card');
+      slides.forEach((s, i) => s.classList.toggle('active', i === currentSlideIndex));
+      document.getElementById('slideCounterText').textContent = `Slide ${currentSlideIndex + 1} of ${slides.length}`;
+      document.getElementById('slideJumpSelect').value = currentSlideIndex;
+    }
+
+    let timerSec = 300;
+    let timerInterval = null;
+
+    function togglePitchTimer() {
+      const btn = document.getElementById('timerToggleBtn');
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        btn.textContent = 'Start';
+      } else {
+        btn.textContent = 'Pause';
+        timerInterval = setInterval(() => {
+          if (timerSec > 0) {
+            timerSec--;
+            const m = String(Math.floor(timerSec / 60)).padStart(2, '0');
+            const s = String(timerSec % 60).padStart(2, '0');
+            document.getElementById('pitchTimerDisplay').textContent = `${m}:${s}`;
+          } else {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            btn.textContent = 'Done';
+          }
+        }, 1000);
+      }
+    }
+
+    function resetPitchTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      timerSec = 300;
+      document.getElementById('pitchTimerDisplay').textContent = '05:00';
+      document.getElementById('timerToggleBtn').textContent = 'Start';
+    }
+
+    function triggerToast(head, msg) {
+      document.getElementById('toastHead').textContent = head;
+      document.getElementById('toastMsg').textContent = msg;
+      const tb = document.getElementById('toastBanner');
+      tb.style.display = 'flex';
+      clearTimeout(window.toastTimeout);
+      window.toastTimeout = setTimeout(() => { tb.style.display = 'none'; }, 4500);
+    }
+
+    // Initialize default views on load
+    renderTownshipMap();
+    renderMapDetailPanel();
+    refreshStormRanking();
+    renderQueueCards();
+  </script>
+</body>
+</html>
