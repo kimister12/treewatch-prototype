@@ -92,6 +92,15 @@
     @media(max-width:1050px){.public-map-grid{grid-template-columns:1fr}.public-tree-panel{min-height:auto;display:grid;grid-template-columns:260px 1fr}.tree-panel-photo{height:100%}.tree-panel-photo .tree-art{left:95px}.storm-content-grid{grid-template-columns:1fr}.weather-stat-grid{grid-template-columns:1fr 1fr}}
     @media(max-width:760px){.citizen-page{min-height:calc(100vh - 66px)}.topbar{justify-content:center}.topbar>.brand{display:none}.role-wrap{position:fixed;top:6px!important;bottom:auto;left:8px;right:8px;transform:none;border:0;border-radius:16px;background:rgba(255,254,248,.97);padding:4px 6px;z-index:80;box-shadow:0 4px 20px rgba(18,63,54,.1);justify-content:space-around}.role-btn{height:45px;flex:1;justify-content:center;flex-direction:column;gap:2px;border-radius:11px;font-size:8px}.role-btn .icon{width:18px;height:18px}.role-btn .role-dot{display:none}.public-container{padding:28px 14px 88px}.public-head{display:block}.public-head h1{font-size:32px}.location-search,.live-weather-tag{margin-top:16px;min-width:0;width:100%}.public-map-canvas{height:500px}.public-tree-panel{display:block}.tree-panel-photo{height:160px}.tree-panel-photo .tree-art{left:47%;}.storm-alert-hero{grid-template-columns:60px 1fr;padding:24px 20px;gap:15px}.storm-orb{width:58px;height:58px;border-radius:19px}.storm-orb .icon{width:33px;height:33px}.storm-alert-copy h2{font-size:27px}.weather-now{grid-column:1/-1;text-align:left;border-left:0;border-top:1px solid rgba(255,255,255,.16);padding:15px 0 0;display:flex;align-items:center;gap:12px}.temp{font-size:43px}.weather-stat-grid{grid-template-columns:1fr 1fr;gap:8px}.weather-stat-grid article{padding:11px;gap:8px}.hourly-row{overflow-x:auto;grid-template-columns:repeat(5,95px);padding-bottom:4px}.safety-strip{display:block}.safety-strip p{margin-top:7px}.mobile-nav{display:none}}
     @media(max-width:460px){.topbar{justify-content:space-between}.public-head h1{font-size:29px}.public-map-canvas{height:460px}.public-zone{width:120px;height:120px}.pz-one{left:47%;top:38%}.public-pin{width:43px;height:43px}.weather-stat-grid{grid-template-columns:1fr}.storm-alert-hero{grid-template-columns:1fr}.storm-orb{display:none}.caution-list-card,.forecast-card{padding:16px}}
+
+    /* Handler operations additions */
+    #handlerMode.active{display:block!important}.handler-link.active{background:var(--forest);color:white;box-shadow:0 4px 12px rgba(18,63,54,.22)}.handler-link.active .icon{color:var(--lime)}
+    .pilot-kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:9px;margin-bottom:14px}.pilot-kpi{background:var(--paper);border:1px solid #dfe3dc;border-left:4px solid var(--forest);border-radius:14px;padding:12px 12px;min-height:85px}.pilot-kpi.orange{border-left-color:var(--warning)}.pilot-kpi.green{border-left-color:var(--safe)}.pilot-kpi small{display:block;font-size:7px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800;line-height:1.35}.pilot-kpi strong{display:block;font-family:var(--display);font-size:19px;margin-top:7px;line-height:1}.pilot-kpi strong span{font-family:var(--body);font-size:7px;color:var(--safe);font-weight:800}.action-stack{display:flex;gap:5px;flex-wrap:wrap}.action-btn.arborist-open{background:var(--danger)}
+    .kanban-wrap{padding:17px;border-top:1px solid #e7ebe4}.kanban-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.kanban-heading h3{font-size:14px;margin:0}.kanban-heading p{font-size:8px;color:var(--muted);margin:3px 0 0}.kanban-board{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.kanban-col{background:#f0f3ee;border:1px solid #e0e5de;border-radius:14px;padding:10px;min-height:172px}.kanban-col-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;font-size:9px;font-weight:800}.kanban-col-head b{width:20px;height:20px;border-radius:7px;background:white;display:grid;place-items:center;font-size:8px}.kanban-card{background:white;border:1px solid #dfe4dc;border-radius:11px;padding:10px;margin-bottom:7px;box-shadow:0 5px 12px rgba(18,63,54,.05)}.kanban-card:last-child{margin-bottom:0}.kanban-card-top{display:flex;justify-content:space-between;gap:6px}.kanban-card strong{font-size:8px}.kanban-card em{font-style:normal;font-size:7px;font-weight:800;color:var(--danger);background:#fde8e4;padding:3px 5px;border-radius:99px}.kanban-card p{font-size:7px;color:var(--muted);margin:4px 0 8px;line-height:1.4}.kanban-card button{width:100%;height:26px;border:0;border-radius:7px;background:#e5ece3;color:var(--forest);font-size:7px;font-weight:800;cursor:pointer}.kanban-card button.arborist-open{background:#fde4df;color:#b63f31}
+    .arb-overlay{position:fixed;inset:0;background:rgba(8,32,27,.76);backdrop-filter:blur(8px);z-index:150;display:grid;place-items:center;padding:18px;opacity:0;pointer-events:none;transition:.25s}.arb-overlay.open{opacity:1;pointer-events:auto}.arb-modal{width:min(650px,96vw);max-height:92vh;overflow:auto;background:var(--paper);border-radius:24px;border:1px solid #d5ded3;box-shadow:0 36px 100px rgba(0,0,0,.32);transform:translateY(16px) scale(.98);transition:.25s}.arb-overlay.open .arb-modal{transform:none}.arb-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line)}.arb-title{display:flex;align-items:center;gap:11px}.arb-seal{width:42px;height:42px;border-radius:14px;background:var(--danger);color:white;display:grid;place-items:center}.arb-seal .icon{width:24px;height:24px}.arb-title small{display:block;color:var(--danger);font-size:7px;letter-spacing:.12em;text-transform:uppercase;font-weight:800}.arb-title h3{font-size:17px;margin:3px 0 0}.arb-close{width:32px;height:32px;border:1px solid var(--line);background:white;border-radius:10px;cursor:pointer}.arb-body{padding:20px}.evidence-box{padding:13px;background:#edf2e9;border:1px solid #d5ded3;border-radius:13px;font-size:9px;line-height:1.55;color:#52675e;margin-bottom:15px}.evidence-box strong{display:block;color:var(--forest);margin-bottom:3px}.arb-field{margin:12px 0}.arb-field label{display:block;font-size:9px;font-weight:800;margin-bottom:6px}.arb-field select{width:100%;border:1px solid #cbd5ca;background:white;border-radius:11px;padding:10px;font-size:9px;color:var(--forest);font-weight:700}.arb-actions{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--line);padding:15px 20px}.arb-actions>span{font-size:8px;color:var(--muted)}.arb-buttons{display:flex;gap:7px}.arb-buttons button{border:0;border-radius:9px;height:36px;padding:0 12px;font-size:8px;font-weight:800;cursor:pointer}.arb-cancel{background:#e9eee7}.arb-confirm{background:var(--forest);color:white}
+    @media(max-width:1200px){.pilot-kpi-grid{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:760px){.pilot-kpi-grid{grid-template-columns:1fr 1fr}.kanban-board{grid-template-columns:1fr 1fr}.handler-link{flex:.75}.arb-actions{align-items:flex-start;flex-direction:column}.arb-buttons{width:100%}.arb-buttons button{flex:1}}
+    @media(max-width:460px){.kanban-board{grid-template-columns:1fr}.pilot-kpi strong{font-size:16px}}
   </style>
 </head>
 <body>
@@ -99,12 +108,13 @@
     <header class="topbar">
       <div class="brand">
         <div class="brand-mark"><span class="icon" data-icon="tree"></span></div>
-        <div><div class="brand-name">TreeWatch</div><div class="brand-sub">Public Safety App</div></div>
+        <div><div class="brand-name">TreeWatch</div><div class="brand-sub">Citizen + Handler Prototype</div></div>
       </div>
       <nav class="role-wrap" aria-label="Citizen app pages">
         <button class="role-btn page-link active" data-page="scan"><span class="icon" data-icon="camera"></span>Smart Scan</button>
         <button class="role-btn page-link" data-page="safety"><span class="icon" data-icon="map"></span>Safety Map</button>
         <button class="role-btn page-link" data-page="storm"><span class="icon" data-icon="cloud"></span>Storm Advisory</button>
+        <button class="role-btn handler-link" data-role-target="handler"><span class="icon" data-icon="grid"></span>Handler</button>
       </nav>
       <div class="top-actions">
         <div class="weather-pill"><span class="icon" data-icon="cloud"></span><strong>Storm watch</strong> · 28°C</div>
@@ -246,9 +256,18 @@
 
         <section class="dashboard">
           <header class="dash-head">
-            <div><div class="eyebrow">Saturday, 17 October · Elmina City</div><h1>Township risk overview</h1></div>
+            <div><div class="eyebrow">Monday, 19 October · Elmina City</div><h1>Township risk overview</h1></div>
             <div class="dash-meta"><div class="outline-pill"><span class="live-dot"></span>Live weather feed</div><div class="outline-pill"><span class="icon" data-icon="download"></span>Export report</div></div>
           </header>
+
+          <div class="pilot-kpi-grid" aria-label="Pilot target KPIs">
+            <article class="pilot-kpi"><small>Report time (&lt;2m)</small><strong>88% <span>Target ≥80%</span></strong></article>
+            <article class="pilot-kpi"><small>Report → Inspection</small><strong>54% faster</strong></article>
+            <article class="pilot-kpi"><small>Pre-storm checked</small><strong>85% <span>Target ≥80%</span></strong></article>
+            <article class="pilot-kpi"><small>High-risk recall</small><strong>92% <span>Target ≥90%</span></strong></article>
+            <article class="pilot-kpi orange"><small>Confirmed escalations</small><strong id="confirmedEscalations">67% <span>Target ≥50%</span></strong></article>
+            <article class="pilot-kpi green"><small>Citizen updated</small><strong id="kpiCitizenPct" style="color:var(--safe)">100% sent</strong></article>
+          </div>
 
           <div class="metric-grid">
             <article class="metric danger-metric"><div class="metric-top"><span class="metric-label">High-risk trees</span><span class="metric-icon"><span class="icon" data-icon="alert"></span></span></div><div class="metric-value">12 <span class="metric-change danger">+3 today</span></div></article>
@@ -293,15 +312,39 @@
             <article class="panel queue-panel">
               <div class="panel-head"><div><h2>Handler triage queue</h2><div class="panel-sub">AI-ranked, duplicate-merged, and routed by owner</div></div><div class="tabs"><button class="tab active">All 47</button><button class="tab">High 12</button><button class="tab">My zone 19</button></div></div>
               <div class="queue-wrap"><table class="queue-table"><thead><tr><th>Tree / location</th><th>Risk</th><th>Reports</th><th>Progress</th><th>Assigned</th><th>Next action</th></tr></thead><tbody>
-                <tr><td><div class="tree-cell"><div class="tree-thumb"><span class="icon" data-icon="tree"></span></div><div><strong>Rain tree · TW-0248</strong><small>Jalan Cecawi 6/12 · SDP</small></div></div></td><td><span class="severity high"><i class="rank-tier" style="background:var(--danger)"></i>High · 86</span></td><td><div class="people"><span>NA</span><span>SY</span><span class="more-people">+1</span></div></td><td><div class="stage-flow"><i class="stage-dot done">✓</i><i class="stage-line done"></i><i class="stage-dot done">✓</i><i class="stage-line"></i><i class="stage-dot">3</i><i class="stage-line"></i><i class="stage-dot">4</i><b class="stage-label">Scheduled</b></div></td><td>A. Firdaus</td><td><button class="action-btn advance-status" data-stage="Inspected">Mark inspected</button></td></tr>
+                <tr id="priorityTreeRow"><td><div class="tree-cell"><div class="tree-thumb"><span class="icon" data-icon="tree"></span></div><div><strong>Rain tree · TW-0248</strong><small>Jalan Cecawi 6/12 · SDP</small></div></div></td><td><span class="severity high"><i class="rank-tier" style="background:var(--danger)"></i>High · 86</span></td><td><div class="people"><span>NA</span><span>SY</span><span class="more-people">+1</span></div></td><td><div class="stage-flow"><i class="stage-dot done">✓</i><i class="stage-line done"></i><i class="stage-dot done">✓</i><i class="stage-line"></i><i class="stage-dot">3</i><i class="stage-line"></i><i class="stage-dot">4</i><b class="stage-label">Scheduled</b></div></td><td>A. Firdaus</td><td><div class="action-stack"><button class="action-btn advance-status" data-stage="Inspected">Mark inspected</button><button class="action-btn arborist-open">Escalate arborist</button></div></td></tr>
                 <tr><td><div class="tree-cell"><div class="tree-thumb" style="background:linear-gradient(145deg,#b8cd89,#697c48)"><span class="icon" data-icon="tree"></span></div><div><strong>Yellow flame · TW-0314</strong><small>Persiaran Shorea · JMB</small></div></div></td><td><span class="severity high"><i class="rank-tier" style="background:var(--danger)"></i>High · 79</span></td><td><div class="people"><span>MF</span><span>TK</span><span class="more-people">+2</span></div></td><td><div class="stage-flow"><i class="stage-dot done">✓</i><i class="stage-line"></i><i class="stage-dot">2</i><i class="stage-line"></i><i class="stage-dot">3</i><i class="stage-line"></i><i class="stage-dot">4</i><b class="stage-label">Reported</b></div></td><td>Unassigned</td><td><button class="action-btn advance-status" data-stage="Scheduled">Schedule check</button></td></tr>
                 <tr><td><div class="tree-cell"><div class="tree-thumb" style="background:linear-gradient(145deg,#b5b58c,#736849)"><span class="icon" data-icon="tree"></span></div><div><strong>Angsana · TW-0189</strong><small>Elmina Lakeside · Council</small></div></div></td><td><span class="severity medium"><i class="rank-tier" style="background:var(--warning)"></i>Medium · 64</span></td><td><div class="people"><span>LL</span><span>HM</span></div></td><td><div class="stage-flow"><i class="stage-dot done">✓</i><i class="stage-line done"></i><i class="stage-dot done">✓</i><i class="stage-line done"></i><i class="stage-dot done">✓</i><i class="stage-line"></i><i class="stage-dot">4</i><b class="stage-label">Inspected</b></div></td><td>S. Hamid</td><td><button class="action-btn advance-status" data-stage="Mitigated">Mark mitigated</button></td></tr>
               </tbody></table></div>
+              <div class="kanban-wrap">
+                <div class="kanban-heading"><div><h3>Operational workflow board</h3><p>Reported → Scheduled → Inspected → Mitigated</p></div><button class="tiny-btn"><span class="live-dot"></span>Live citizen updates</button></div>
+                <div class="kanban-board">
+                  <section class="kanban-col"><div class="kanban-col-head"><span>Reported</span><b>2</b></div><article class="kanban-card"><div class="kanban-card-top"><strong>TW-0314 · Yellow flame</strong><em>79</em></div><p>Severe lean beside playground · 4 merged reports</p><button class="kanban-advance" data-next="Scheduled">Schedule priority check</button></article><article class="kanban-card"><div class="kanban-card-top"><strong>TW-0291 · Mahogany</strong><em>58</em></div><p>Trunk wound near footpath · 2 merged reports</p></article></section>
+                  <section class="kanban-col"><div class="kanban-col-head"><span>Scheduled</span><b>1</b></div><article class="kanban-card" id="priorityKanban"><div class="kanban-card-top"><strong>TW-0248 · Rain tree</strong><em>86</em></div><p>Lifted roots + 18° lean toward school crossing</p><button class="arborist-open">Escalate to ISA arborist</button></article></section>
+                  <section class="kanban-col"><div class="kanban-col-head"><span>Inspected</span><b>1</b></div><article class="kanban-card"><div class="kanban-card-top"><strong>TW-0189 · Angsana</strong><em style="color:#936318;background:#fff0d8">64</em></div><p>Dead limbs confirmed above parking bays</p><button class="kanban-advance" data-next="Mitigated">Send to landscape team</button></article></section>
+                  <section class="kanban-col"><div class="kanban-col-head"><span>Mitigated</span><b>3</b></div><article class="kanban-card"><div class="kanban-card-top"><strong>TW-0172 · Rain tree</strong><em style="color:var(--safe);background:#e4f1e5">Closed</em></div><p>Crown reduction completed · citizens notified</p></article></section>
+                </div>
+              </div>
             </article>
           </div>
         </section>
       </div>
     </main>
+
+    <div id="arboristModal" class="arb-overlay" aria-hidden="true">
+      <div class="arb-modal" role="dialog" aria-modal="true" aria-labelledby="arbModalTreeTitle">
+        <div class="arb-head">
+          <div class="arb-title"><div class="arb-seal"><span class="icon" data-icon="shield"></span></div><div><small>ISA-certified arborist escalation</small><h3 id="arbModalTreeTitle">TW-0248 · Rain tree</h3></div></div>
+          <button class="arb-close" aria-label="Close arborist modal">×</button>
+        </div>
+        <div class="arb-body">
+          <div class="evidence-box"><strong>Handler triage note & AI evidence package</strong>AI flagged an 18° lean and lifted roots within 15m of a school crossing. Handler visual check confirmed tension cracks in the root plate. Three citizen reports have been merged.</div>
+          <div class="arb-field"><label for="arbRatingSelect">Arborist final ISA TRAQ risk rating</label><select id="arbRatingSelect"><option>Confirmed high risk — immediate mitigation required</option><option>Moderate risk — targeted structural pruning</option><option>Low risk — retain and monitor every 6 months</option></select></div>
+          <div class="arb-field"><label for="arbActionSelect">Prescribed action — protect green assets without blanket felling</label><select id="arbActionSelect"><option>25% crown reduction pruning and deadwood removal (save tree)</option><option>Dynamic cable bracing + root-zone decompaction (save tree)</option><option>Targeted removal and native species replacement (critical decay)</option></select></div>
+        </div>
+        <div class="arb-actions"><span>Citizen reporters will be notified automatically.</span><div class="arb-buttons"><button class="arb-cancel">Cancel</button><button class="arb-confirm">Confirm decision & notify</button></div></div>
+      </div>
+    </div>
 
     <div id="scanOverlay" class="overlay" aria-hidden="true">
       <div class="scan-modal" role="dialog" aria-modal="true" aria-labelledby="scanTitle">
@@ -394,11 +437,21 @@
     document.querySelectorAll('[data-icon]').forEach(el => el.innerHTML = icons[el.dataset.icon] || '');
 
     function switchPage(page){
+      document.getElementById('residentMode').classList.add('active');
+      document.getElementById('handlerMode').classList.remove('active');
       document.querySelectorAll('.citizen-page').forEach(el=>el.classList.toggle('active',el.dataset.page===page));
       document.querySelectorAll('.page-link').forEach(el=>el.classList.toggle('active',el.dataset.page===page));
+      document.querySelector('.handler-link').classList.remove('active');
       window.scrollTo({top:0,behavior:'smooth'});
     }
     document.querySelectorAll('.page-link').forEach(btn=>btn.addEventListener('click',()=>switchPage(btn.dataset.page)));
+    document.querySelector('.handler-link').addEventListener('click',()=>{
+      document.getElementById('residentMode').classList.remove('active');
+      document.getElementById('handlerMode').classList.add('active');
+      document.querySelectorAll('.page-link').forEach(el=>el.classList.remove('active'));
+      document.querySelector('.handler-link').classList.add('active');
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
 
     const overlay=document.getElementById('scanOverlay'),pages=[...document.querySelectorAll('.step-page')]; let step=1;
     const titles={1:['Locate the tree','Step 1 of 3 · Where'],2:['Add guided photos','Step 2 of 3 · Evidence'],3:['Describe warning cues','Step 3 of 3 · What you noticed'],4:['Report received','Closed-loop tracking enabled']};
@@ -406,13 +459,28 @@
     function openScan(){overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');showStep(1)}
     function closeScan(){overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true')}
     document.querySelectorAll('.open-scan').forEach(b=>b.addEventListener('click',openScan));document.getElementById('closeScan').onclick=closeScan;document.getElementById('finishReport').onclick=closeScan;
-    overlay.addEventListener('click',e=>{if(e.target===overlay)closeScan()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeScan()});
+    overlay.addEventListener('click',e=>{if(e.target===overlay)closeScan()});document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeScan();closeArboristModal()}});
     document.querySelectorAll('.next-step').forEach(b=>b.addEventListener('click',()=>showStep(Math.min(3,step+1))));document.querySelectorAll('.prev-step').forEach(b=>b.addEventListener('click',()=>showStep(Math.max(1,step-1))));
     document.querySelectorAll('.photo-slot').forEach((slot,i)=>slot.addEventListener('click',()=>{slot.classList.add('captured');slot.innerHTML='<span class="quality-badge">✓ Sharp · privacy blur on</span><span class="icon" data-icon="check">'+icons.check+'</span><strong>'+['Whole tree','Trunk base','Canopy','The concern'][i]+'</strong><small>Tap to retake</small>';showToast('Photo '+(i+1)+' passed the quality check')}));
     document.querySelectorAll('.cue').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('selected')));document.getElementById('submitReport').onclick=()=>showStep(4);
 
     const toast=document.getElementById('toast'),toastText=document.getElementById('toastText');let toastTimer;
     function showToast(message){toastText.textContent=message;toast.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('show'),2600)}
+
+    const arbModal=document.getElementById('arboristModal');
+    function openArboristModal(){arbModal.classList.add('open');arbModal.setAttribute('aria-hidden','false')}
+    function closeArboristModal(){arbModal.classList.remove('open');arbModal.setAttribute('aria-hidden','true')}
+    document.querySelectorAll('.arborist-open').forEach(btn=>btn.addEventListener('click',openArboristModal));
+    document.querySelector('.arb-close').addEventListener('click',closeArboristModal);document.querySelector('.arb-cancel').addEventListener('click',closeArboristModal);
+    arbModal.addEventListener('click',event=>{if(event.target===arbModal)closeArboristModal()});
+    document.querySelector('.arb-confirm').addEventListener('click',()=>{
+      const rating=document.getElementById('arbRatingSelect').value,row=document.getElementById('priorityTreeRow');
+      row.querySelector('.stage-label').textContent='Arborist rated';row.querySelectorAll('.stage-dot')[2].classList.add('done');row.querySelectorAll('.stage-dot')[2].textContent='✓';
+      row.querySelector('.arborist-open').textContent='Decision recorded';row.querySelector('.arborist-open').classList.add('done');
+      document.querySelector('#priorityKanban .arborist-open').textContent='Arborist decision recorded';
+      closeArboristModal();showToast(rating+' · all 3 citizen reporters notified');
+    });
+    document.querySelectorAll('.kanban-advance').forEach(btn=>btn.addEventListener('click',()=>{btn.textContent=btn.dataset.next+' · citizens notified';btn.disabled=true;showToast('Ticket moved to '+btn.dataset.next+' · citizen update sent')}));
 
     const wind=document.getElementById('windRange'),rain=document.getElementById('rainRange');
     const rankData=[
