@@ -1,44 +1,19 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#123f36">
-  <title>TreeWatch Prototype Lab</title>
+  <meta http-equiv="refresh" content="0; url=prototype-1/">
+  <title>TreeWatch Township</title>
+  <link rel="canonical" href="prototype-1/">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Manrope:wght@400;500;600;700;800&display=swap');
-    :root{--forest:#123f36;--deep:#0d2f29;--lime:#d8f078;--cream:#f4f3e9;--paper:#fffef8;--line:#d9dfd6;--muted:#6d7d75;--orange:#f58220;--red:#d9232a;--display:'Bricolage Grotesque',Georgia,serif;--body:'Manrope','Trebuchet MS',sans-serif}
-    *{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--deep);font-family:var(--body);min-height:100vh}a{color:inherit;text-decoration:none}.shell{min-height:100vh;overflow:hidden;position:relative}.shell:before{content:'';position:fixed;width:560px;height:560px;border-radius:50%;border:1px solid rgba(18,63,54,.08);right:-160px;top:100px;box-shadow:0 0 0 75px rgba(18,63,54,.025),0 0 0 150px rgba(18,63,54,.02);pointer-events:none}
-    header{height:78px;padding:0 34px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(18,63,54,.1);background:rgba(255,254,248,.88);backdrop-filter:blur(16px);position:relative;z-index:2}.brand{display:flex;align-items:center;gap:11px}.mark{width:40px;height:40px;border-radius:13px;background:var(--forest);color:var(--lime);display:grid;place-items:center;box-shadow:0 8px 20px rgba(18,63,54,.18)}.mark svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.brand strong{display:block;font-family:var(--display);font-size:19px;letter-spacing:-.02em}.brand span{display:block;text-transform:uppercase;letter-spacing:.16em;font-size:8px;color:var(--muted);font-weight:800;margin-top:3px}.repo{border:1px solid var(--line);background:var(--paper);padding:9px 12px;border-radius:99px;font-size:9px;font-weight:800;display:flex;align-items:center;gap:7px}.repo i{width:7px;height:7px;border-radius:50%;background:#69aa78;box-shadow:0 0 0 3px rgba(105,170,120,.15)}
-    main{max-width:1240px;margin:0 auto;padding:64px 30px 72px;position:relative;z-index:1}.eyebrow{text-transform:uppercase;letter-spacing:.18em;font-weight:800;font-size:9px;color:#2f7462}.hero{text-align:center;max-width:760px;margin:0 auto 44px}.hero h1{font-family:var(--display);font-size:clamp(42px,6vw,72px);line-height:.98;letter-spacing:-.055em;margin:12px 0 18px;color:var(--forest)}.hero h1 em{font-style:italic;font-weight:500;color:#4c9d6f}.hero p{font-size:13px;line-height:1.7;color:var(--muted);max-width:620px;margin:0 auto}.prototype-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-    .card{border:1px solid var(--line);background:var(--paper);border-radius:25px;overflow:hidden;box-shadow:0 20px 54px rgba(18,63,54,.09);transition:.28s ease;position:relative}.card:hover{transform:translateY(-5px);box-shadow:0 28px 70px rgba(18,63,54,.15)}.preview{height:275px;position:relative;overflow:hidden}.card-a .preview{background:linear-gradient(135deg,#e8efdf,#b4d4ab)}.card-b .preview{background:linear-gradient(135deg,#ebe9dc,#cbd5bc)}.preview:after{content:'';position:absolute;width:260px;height:260px;border-radius:50%;right:-80px;top:-100px;background:rgba(255,255,255,.25);box-shadow:0 0 0 55px rgba(255,255,255,.08)}
-    .browser{position:absolute;left:34px;right:34px;top:31px;height:220px;background:#fff;border-radius:14px 14px 5px 5px;box-shadow:0 20px 38px rgba(18,63,54,.18);overflow:hidden;transform:rotate(-1deg)}.card-b .browser{transform:rotate(1deg)}.browser-bar{height:25px;border-bottom:1px solid #e5e8e2;background:#fafbf8;display:flex;align-items:center;padding:0 9px;gap:4px}.browser-bar i{width:6px;height:6px;border-radius:50%;background:#d9ddd6}.browser-body{height:195px;display:grid;grid-template-columns:34% 66%}.mini-side{background:var(--forest);padding:18px 10px}.mini-logo{width:22px;height:22px;border-radius:7px;background:var(--lime);margin-bottom:17px}.mini-line{height:5px;border-radius:8px;background:rgba(255,255,255,.22);margin:7px 0}.mini-line.short{width:65%}.mini-main{background:#f4f5ef;padding:18px}.mini-title{width:58%;height:12px;border-radius:8px;background:var(--forest);margin-bottom:12px}.mini-text{height:5px;width:82%;background:#b8c1ba;border-radius:8px;margin:6px 0}.mini-cards{display:grid;grid-template-columns:1.4fr .8fr;gap:8px;margin-top:15px}.mini-cards i{height:92px;background:#d5e5cf;border-radius:9px}.mini-cards i:last-child{background:white;border:1px solid #dce1da}.card-b .mini-side{background:#2c3825}.card-b .mini-logo{background:linear-gradient(135deg,var(--red),var(--orange))}.card-b .mini-title{background:#4e5e42}.card-b .mini-cards i:first-child{background:#d5dec8}
-    .card-body{padding:24px 26px 26px}.card-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.version{font-size:8px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--muted)}.status{font-size:8px;font-weight:800;padding:5px 8px;border-radius:99px;background:#e8f1e5;color:#397458}.card-b .status{background:#fff0df;color:#b5681c}.card h2{font-family:var(--display);font-size:27px;letter-spacing:-.035em;margin:0 0 8px}.card p{font-size:10px;line-height:1.65;color:var(--muted);margin:0 0 17px}.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:21px}.chips span{border:1px solid var(--line);background:#f7f8f3;padding:6px 8px;border-radius:8px;font-size:8px;font-weight:700}.open-btn{height:46px;border-radius:12px;background:var(--forest);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:10px;font-weight:800;transition:.2s}.open-btn:hover{background:#0b5140}.card-b .open-btn{background:#2c3825}.open-btn b{width:25px;height:25px;border-radius:8px;background:rgba(255,255,255,.12);display:grid;place-items:center;font-size:14px}.compare-note{margin-top:20px;padding:15px 17px;border:1px dashed #bfcabe;border-radius:15px;display:flex;align-items:center;justify-content:space-between;gap:15px;color:var(--muted);font-size:9px}.compare-note strong{color:var(--forest)}.compare-note span:last-child{white-space:nowrap}
-    footer{border-top:1px solid rgba(18,63,54,.1);padding:18px 34px;display:flex;justify-content:space-between;color:var(--muted);font-size:8px;position:relative;z-index:1}.dot{display:inline-block;width:6px;height:6px;background:#69aa78;border-radius:50%;margin-right:5px}
-    @media(max-width:760px){header{height:68px;padding:0 16px}.repo{display:none}main{padding:42px 15px 54px}.hero{margin-bottom:28px}.hero h1{font-size:45px}.prototype-grid{grid-template-columns:1fr}.preview{height:230px}.browser{left:22px;right:22px;top:25px;height:185px}.browser-body{height:160px}.mini-cards i{height:62px}.compare-note{display:block}.compare-note span:last-child{display:block;margin-top:7px}footer{padding:16px;display:block;line-height:1.7}}
+    body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f4f3e9;color:#123f36;font:600 16px system-ui,sans-serif}
+    a{color:#123f36}
   </style>
+  <script>location.replace('prototype-1/')</script>
 </head>
 <body>
-  <div class="shell">
-    <header>
-      <div class="brand"><div class="mark"><svg viewBox="0 0 24 24"><path d="M12 22v-7m0 2-3-3m3 1 3-3"/><path d="M7 14a4 4 0 0 1-1-7.87A6 6 0 0 1 17.8 8 3.5 3.5 0 0 1 17 15H8.5A3.5 3.5 0 0 1 7 14Z"/></svg></div><div><strong>TreeWatch Lab</strong><span>Prototype comparison</span></div></div>
-      <div class="repo"><i></i>2 prototypes · shared workspace</div>
-    </header>
-    <main>
-      <section class="hero"><div class="eyebrow">TreeWatch Township · Design Lab</div><h1>Choose a prototype <em>to explore.</em></h1><p>Two independent directions for the same township tree-safety challenge. Open either version, test its interactions, and compare the resident experience.</p></section>
-      <section class="prototype-grid">
-        <article class="card card-a">
-          <div class="preview"><div class="browser"><div class="browser-bar"><i></i><i></i><i></i></div><div class="browser-body"><div class="mini-side"><div class="mini-logo"></div><div class="mini-line"></div><div class="mini-line short"></div><div class="mini-line"></div></div><div class="mini-main"><div class="mini-title"></div><div class="mini-text"></div><div class="mini-text"></div><div class="mini-cards"><i></i><i></i></div></div></div></div></div>
-          <div class="card-body"><div class="card-meta"><span class="version">Prototype 01 · Dual-view core</span><span class="status">Current</span></div><h2>Citizen + Handler System</h2><p>A public safety app paired with a township command centre for risk mapping, storm ranking, triage, and arborist escalation.</p><div class="chips"><span>Smart Scan</span><span>Map + Ranker</span><span>ISA Escalation</span></div><a class="open-btn" href="prototype-1/" target="_blank" rel="noopener">Open dual-view prototype <b>→</b></a></div>
-        </article>
-        <article class="card card-b">
-          <div class="preview"><div class="browser"><div class="browser-bar"><i></i><i></i><i></i></div><div class="browser-body"><div class="mini-side"><div class="mini-logo"></div><div class="mini-line"></div><div class="mini-line short"></div><div class="mini-line"></div></div><div class="mini-main"><div class="mini-title"></div><div class="mini-text"></div><div class="mini-text"></div><div class="mini-cards"><i></i><i></i></div></div></div></div></div>
-          <div class="card-body"><div class="card-meta"><span class="version">Prototype 02 · Full system</span><span class="status">Gemini version</span></div><h2>Township System & Deck</h2><p>An alternative full-system concept combining resident and handler views with an embedded 13-slide pitch presentation.</p><div class="chips"><span>Dual Roles</span><span>Operations</span><span>Pitch Deck</span></div><a class="open-btn" href="prototype-2/" target="_blank" rel="noopener">Open Gemini prototype <b>→</b></a></div>
-        </article>
-      </section>
-      <div class="compare-note"><span><strong>Team workflow:</strong> each prototype lives in its own folder, so edits remain independent.</span><span>Merge changes to <strong>main</strong> to update this site.</span></div>
-    </main>
-    <footer><span><i class="dot"></i>TreeWatch prototype workspace</span><span>Built for collaborative review</span></footer>
-  </div>
+  <p>Opening <a href="prototype-1/">TreeWatch Township</a>…</p>
 </body>
 </html>
