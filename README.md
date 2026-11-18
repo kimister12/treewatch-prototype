@@ -12,7 +12,7 @@ The link opens the current mobile-first prototype directly. For the best demonst
 
 Tree hazards are often reported through unstructured messages with incomplete locations and unclear photographs. During heavy rain or strong winds, township teams also need a defensible way to decide which reported trees should be checked first.
 
-TreeWatch turns resident observations into structured, location-aware reports and gives township handlers a shared operational view. The prototype connects guided evidence capture, duplicate-report merging, 15-metre fall-zone awareness, live local weather, transparent risk ranking, and closed-loop citizen updates.
+TreeWatch turns resident observations into structured, location-aware reports and gives township handlers an operational view. The prototype connects guided evidence capture, duplicate-report merging, 15-metre fall-zone awareness, live local weather, transparent risk ranking, and closed-loop citizen updates.
 
 ## Who it serves
 
@@ -24,12 +24,12 @@ TreeWatch turns resident observations into structured, location-aware reports an
 ### Resident experience
 
 - **Smart Scan & Report:** a four-step flow for location, guided photographs, visible warning cues, and review.
-- **Guided evidence:** whole-tree, trunk-base, and canopy photographs with simulated quality checks and privacy protection.
+- **Guided evidence:** whole-tree, trunk-base, and canopy photographs with a prototype quality check and privacy reminder.
 - **Location choice:** Elmina is the default demonstration area; residents can search another Malaysian location or use precise device GPS.
 - **Duplicate awareness:** nearby reports are merged into one tree ticket rather than flooding the handler queue.
 - **Neighborhood Safety Map:** live OpenStreetMap tiles, reported-tree markers, status counters, and 15-metre caution zones.
 - **Location-based weather:** current temperature, expected rainfall, gusts, and hourly conditions update using the same selected coordinates as the map.
-- **My Reports:** a visible status timeline showing Reported, Scheduled, Inspected, and Mitigated stages.
+- **My Reports:** a visible status timeline showing Reported, Scheduled, Inspected, Arborist Review, and Mitigated stages.
 
 ### Township handler experience
 
@@ -40,7 +40,7 @@ TreeWatch turns resident observations into structured, location-aware reports an
 
 ### Risk logic
 
-TreeWatch communicates a transparent prioritisation concept:
+TreeWatch communicates a transparent prioritisation concept. The prototype score is rule-based and simulated; it is not a trained AI diagnosis:
 
 ```text
 Risk = Likelihood × Consequence × Storm Factor
@@ -64,11 +64,12 @@ Risk = Likelihood × Consequence × Storm Factor
 
 ```text
 treewatch-prototype/
-├── index.html                 # Redirects directly to the current prototype
-├── README.md                  # Hackathon submission overview
-└── prototype-1/
-    ├── index.html             # Resident app and handler dashboard
-    └── assets/                # Demonstration tree photographs
+├── index.html                 # Resident app and handler dashboard
+├── styles.css                 # Responsive interface styles
+├── app.js                     # Location, weather, map, and UI logic
+├── static-api.js              # Device-local demonstration data adapter
+├── assets/                    # Demonstration tree photographs
+└── README.md                  # Hackathon submission overview
 ```
 
 The application is a static, single-page prototype. It does not require a build step or package installation.
@@ -83,6 +84,7 @@ The application is a static, single-page prototype. It does not require a build 
 | Search | OpenStreetMap Nominatim | Forward search for Malaysian townships and addresses |
 | Place labels | BigDataCloud reverse geocoding | Converts GPS coordinates into readable area labels |
 | Weather | Open-Meteo | Coordinate-based current and hourly weather conditions |
+| Demo storage | Browser localStorage | Keeps reports and status updates on the current device |
 | Hosting | GitHub Pages | Public hackathon demonstration |
 
 ### Data flow
@@ -107,15 +109,18 @@ flowchart LR
 - Internal decay and structural weakness may not be visible in resident photographs.
 - High-risk, uncertain, or technically complex cases require on-site assessment by trained personnel and, where appropriate, a qualified arborist.
 - Residents are instructed to keep away from an actively falling tree, blocked road, fallen power line, or immediate danger and contact emergency services.
-- The interface demonstrates automatic face and vehicle-plate blurring before evidence upload.
+- Residents are reminded to avoid photographing people. A production version should automatically blur faces and vehicle plates before upload.
 
 ## Prototype scope
 
-This repository demonstrates the user experience and operational concept. The following elements currently use demonstration data:
+This repository demonstrates the user experience and operational concept. Reports and handler actions are stored in the current browser using `localStorage`; they are not shared between devices. This allows the full resident-to-handler flow to be presented from one phone or laptop without a backend.
+
+The following elements currently use demonstration or simulated data:
 
 - Reported-tree records and their positions around the selected map location.
 - Duplicate-report counts, ownership, workflow history, and notifications.
 - Visible-defect scores, risk tiers, handler KPIs, and arborist decisions.
+- Image clarity checks and privacy blurring.
 
 A production deployment would require authenticated users, a geospatial report database, secure media storage, notification services, audited scoring logic, consent and retention controls, and validation using arborist-labelled cases.
 

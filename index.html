@@ -1,19 +1,181 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <!-- Metadata and external UI libraries -->
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#123f36">
-  <meta http-equiv="refresh" content="0; url=prototype-1/">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#103f35">
+  <meta name="description" content="TreeWatch citizen reporting and township tree-risk operations prototype.">
   <title>TreeWatch Township</title>
-  <link rel="canonical" href="prototype-1/">
-  <style>
-    body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f4f3e9;color:#123f36;font:600 16px system-ui,sans-serif}
-    a{color:#123f36}
-  </style>
-  <script>location.replace('prototype-1/')</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <p>Opening <a href="prototype-1/">TreeWatch Township</a>…</p>
+  <!-- Application shell -->
+  <svg class="svg-sprite" aria-hidden="true">
+    <symbol id="i-tree" viewBox="0 0 24 24"><path d="M12 22v-7m0 2-3-3m3 1 3-3M7 14a4 4 0 0 1-1-7.9A6 6 0 0 1 17.8 8 3.5 3.5 0 0 1 17 15H8.5A3.5 3.5 0 0 1 7 14Z"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M5 7h3l1.5-2h5L16 7h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"/><circle cx="12" cy="13" r="4"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3Z"/><path d="M9 3v15M15 6v15"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 2h9l4 4v16H6Z"/><path d="M14 2v5h5M9 12h7M9 16h7"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M6 18h12a4 4 0 0 0 .5-8A6.5 6.5 0 0 0 6.2 8.5 4.8 4.8 0 0 0 6 18Z"/><path d="m8 21 1-2m4 2 1-2m4 2 1-2"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2 21h20Z"/><path d="M12 9v5m0 3v.1"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h12M9 12h12M9 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m4 13 5 5L20 6"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0m1-17a4 4 0 0 1 0 8m1 3a6 6 0 0 1 4 6"/></symbol>
+  </svg>
+
+  <div id="appLoader" class="app-loader"><div class="loader-mark"><svg><use href="#i-tree"/></svg></div><strong>Growing TreeWatch…</strong><span>Loading demonstration reports</span></div>
+
+  <header class="global-header">
+    <a class="brand" href="#" aria-label="TreeWatch home"><span class="brand-mark"><svg><use href="#i-tree"/></svg></span><span><b>TreeWatch</b><small>Township safety network</small></span></a>
+    <div class="role-switch" aria-label="Switch application role">
+      <button class="role-button active" data-role="citizen"><svg><use href="#i-users"/></svg><span>Resident</span></button>
+      <button class="role-button" data-role="handler"><svg><use href="#i-grid"/></svg><span>Township Handler</span></button>
+    </div>
+    <div class="connection-badge"><i></i><span id="connectionLabel">Demo saved on this device</span></div>
+  </header>
+  <!-- Citizen application -->
+  <main id="citizenApp" class="citizen-app">
+    <section class="citizen-view active" data-citizen-view="home">
+      <div class="mobile-shell home-shell">
+        <div class="resident-greeting"><div><span class="eyebrow">Resident safety app</span><h1>Good day, neighbor.</h1><p>Report visible tree concerns and know what to avoid nearby.</p></div><button class="icon-button" data-citizen-nav="reports" aria-label="View notifications"><svg><use href="#i-bell"/></svg><span id="notificationCount">0</span></button></div>
+        <article class="storm-hero">
+          <div class="storm-copy"><span class="live-pill"><i></i>Live local weather</span><h2 id="homeWeatherHeadline">Checking conditions near Elmina…</h2><p id="homeWeatherCopy">Weather and reported trees are matched to your selected area.</p><div class="weather-inline"><strong id="homeTemp">--°</strong><span><b id="homeRain">-- mm</b> rain</span><span><b id="homeGust">-- km/h</b> gusts</span></div></div>
+          <button class="storm-map-button" data-citizen-nav="map"><svg><use href="#i-map"/></svg><span>Open safety map</span></button>
+        </article>
+        <div class="home-location"><svg><use href="#i-pin"/></svg><div><small>Current app location</small><strong id="homeLocation">Elmina, Shah Alam, Selangor</strong></div><button data-citizen-nav="map">Change</button></div>
+        <div class="quick-grid">
+          <button class="quick-card primary" data-citizen-nav="scan"><span class="quick-icon"><svg><use href="#i-camera"/></svg></span><span><b>Report a tree</b><small>Guided scan</small></span><svg class="quick-arrow"><use href="#i-arrow"/></svg></button>
+          <button class="quick-card" data-citizen-nav="map"><span class="quick-icon"><svg><use href="#i-map"/></svg></span><span><b>Nearby hazards</b><small><span id="nearbyCount">0</span> active reports</small></span><svg class="quick-arrow"><use href="#i-arrow"/></svg></button>
+        </div>
+        <section class="home-section"><div class="section-heading"><div><span class="eyebrow">Live community signal</span><h2>Trees needing attention</h2></div><button data-citizen-nav="map">View map</button></div><div id="homeRiskList" class="home-risk-list skeleton-list"></div></section>
+        <section class="safety-note"><svg><use href="#i-alert"/></svg><div><strong>Immediate danger?</strong><p>Keep away from an actively falling tree, blocked road, or fallen power line and contact emergency services.</p></div></section>
+      </div>
+    </section>
+
+    <section class="citizen-view" data-citizen-view="scan">
+      <div class="mobile-shell scan-shell">
+        <div class="view-topline"><button class="back-home" data-citizen-nav="home"><svg><use href="#i-arrow"/></svg></button><div><span class="eyebrow">Smart scan & report</span><h1>Document the tree safely.</h1></div><span class="time-chip">About 2 min</span></div>
+        <div class="emergency-banner"><svg><use href="#i-alert"/></svg><p><strong>Stay clear of unstable trees.</strong> Never stand beneath damaged branches to take a photograph.</p></div>
+        <div class="scan-progress" aria-label="Report progress"><button class="active" data-step-jump="1"><b>1</b><span>Location</span></button><i></i><button data-step-jump="2"><b>2</b><span>Photos</span></button><i></i><button data-step-jump="3"><b>3</b><span>Concern</span></button><i></i><button data-step-jump="4"><b>4</b><span>Review</span></button></div>
+        <form id="reportForm" class="scan-card">
+          <section class="scan-step active" data-scan-step="1">
+            <div class="step-heading"><span>Step 1 of 4</span><h2>Where is the tree?</h2><p>Elmina is selected by default. Search another place or use device GPS.</p></div>
+            <div class="scan-photo-hero"><img src="assets/tree-whole.webp" alt="Example leaning tree"><span><svg><use href="#i-camera"/></svg>Keep a safe distance</span></div>
+            <div class="location-card"><svg><use href="#i-pin"/></svg><div><small>Selected location</small><strong id="scanAddress">Elmina, Shah Alam, Selangor</strong><span id="scanCoords">3.18037° N, 101.51730° E</span></div><button type="button" id="scanGpsButton">Use GPS</button></div>
+            <div class="scan-search"><input id="scanLocationInput" type="search" value="Elmina, Shah Alam" placeholder="Search township, street or postcode" aria-label="Search tree location"><button id="scanLocationButton" type="button"><svg><use href="#i-search"/></svg>Search</button></div>
+            <label class="field-label">Tree type, if known<select id="treeType"><option>Species unconfirmed</option><option>Rain tree</option><option>Angsana</option><option>Yellow flame</option><option>Mahogany</option><option>Tecoma</option></select></label>
+            <div id="duplicateNotice" class="duplicate-notice hidden"><svg><use href="#i-users"/></svg><div><strong>Possible existing report nearby</strong><p>Add evidence to the same ticket instead of creating a duplicate.</p></div></div>
+          </section>
+
+          <section class="scan-step" data-scan-step="2">
+            <div class="step-heading"><span>Step 2 of 4</span><h2>Capture three guided views.</h2><p>Clear, well-lit photographs help handlers perform a faster visual check.</p></div>
+            <div class="photo-guide-grid">
+              <label class="photo-slot" data-photo-slot="whole"><input type="file" accept="image/*" capture="environment"><img src="assets/tree-whole.webp" alt="Whole tree example"><span><b>01</b>Whole tree</span><em>Tap to replace</em></label>
+              <label class="photo-slot" data-photo-slot="trunk"><input type="file" accept="image/*" capture="environment"><img src="assets/tree-trunk.webp" alt="Trunk base example"><span><b>02</b>Trunk base</span><em>Tap to replace</em></label>
+              <label class="photo-slot" data-photo-slot="canopy"><input type="file" accept="image/*" capture="environment"><img src="assets/tree-canopy.webp" alt="Canopy example"><span><b>03</b>Canopy</span><em>Tap to replace</em></label>
+            </div>
+            <div class="quality-panel"><div><svg><use href="#i-check"/></svg><span><strong>Presentation quality check</strong><small>All three demonstration images are clear enough to continue.</small></span></div><b>3 / 3 ready</b></div>
+            <div class="privacy-panel"><svg><use href="#i-users"/></svg><p><strong>Privacy reminder:</strong> avoid photographing people. A production version should blur faces and number plates before upload.</p></div>
+          </section>
+
+          <section class="scan-step" data-scan-step="3">
+            <div class="step-heading"><span>Step 3 of 4</span><h2>What did you notice?</h2><p>Select every visible cue. Do not touch damaged roots, bark, or branches.</p></div>
+            <div id="cueGrid" class="cue-grid">
+              <button type="button" data-cue="Leaning tree"><span class="cue-glyph">↗</span><b>Leaning tree</b><small>Visible tilt</small></button>
+              <button type="button" data-cue="Trunk crack"><span class="cue-glyph">⌁</span><b>Trunk crack</b><small>Split or wound</small></button>
+              <button type="button" data-cue="Dead branches"><span class="cue-glyph">Y</span><b>Dead branches</b><small>Dry or leafless</small></button>
+              <button type="button" data-cue="Lifted roots"><span class="cue-glyph">≈</span><b>Lifted roots</b><small>Soil movement</small></button>
+            </div>
+            <fieldset class="context-card"><legend>What is inside the estimated 15m fall zone?</legend><p>This changes the consequence score.</p><div id="contextOptions" class="context-options"><button type="button" data-context="Road">Road</button><button type="button" data-context="House">House</button><button type="button" data-context="Parking">Parking</button><button type="button" data-context="Playground">Playground</button><button type="button" data-context="Footpath">Footpath</button><button type="button" data-context="Open grass">Open grass</button></div></fieldset>
+            <div class="weather-context"><svg><use href="#i-cloud"/></svg><div><small>Live weather context</small><strong><span id="scanRain">-- mm</span> rain · <span id="scanGust">-- km/h</span> gusts</strong></div><span>Added</span></div>
+          </section>
+
+          <section class="scan-step" data-scan-step="4">
+            <div class="step-heading"><span>Step 4 of 4</span><h2>Review and save.</h2><p>Your report will immediately appear in the handler queue on this device.</p></div>
+            <article class="analysis-card"><div class="score-ring"><strong id="reviewAiScore">--</strong><span>/100</span></div><div><small>Simulated visible-defect pre-check</small><h3 id="reviewTier">Select warning cues first</h3><p id="reviewReason">This presentation score supports handler triage and never declares a tree safe.</p></div><b id="reviewRiskBadge" class="risk-badge monitor">Monitor</b></article>
+            <div class="risk-breakdown"><div><span>Likelihood</span><strong id="reviewLikelihood">--</strong></div><div><span>Consequence</span><strong id="reviewConsequence">--</strong></div><div><span>Storm factor</span><strong id="reviewStorm">--</strong></div></div>
+            <label class="field-label">Your name or initials<input id="reporterName" maxlength="80" placeholder="Example: Nur A."></label>
+            <label class="field-label">Optional note<textarea id="reportNotes" maxlength="800" placeholder="Example: roots lifted further after last night's rain."></textarea></label>
+            <div class="responsible-note"><svg><use href="#i-alert"/></svg><p><strong>Human review required.</strong> Internal decay cannot be confirmed from photographs. Severe or uncertain cases require an on-site inspection.</p></div>
+          </section>
+
+          <div class="scan-actions"><button id="scanBack" type="button" class="secondary-action" disabled>Back</button><button id="scanNext" type="button" class="primary-action">Continue<svg><use href="#i-arrow"/></svg></button><button id="scanSubmit" type="submit" class="primary-action hidden">Save report<svg><use href="#i-arrow"/></svg></button></div>
+        </form>
+      </div>
+    </section>
+    <section class="citizen-view" data-citizen-view="map">
+      <div class="mobile-shell map-shell">
+        <div class="view-topline"><button class="back-home" data-citizen-nav="home"><svg><use href="#i-arrow"/></svg></button><div><span class="eyebrow">Neighborhood safety map</span><h1>Know what to avoid nearby.</h1></div></div>
+        <div class="map-search-card"><div class="map-search-row"><svg><use href="#i-pin"/></svg><input id="mapLocationInput" value="Elmina, Shah Alam" aria-label="Search map location"><button id="mapSearchButton">Search</button></div><div class="map-location-row"><span id="mapLocationLabel">Elmina, Shah Alam, Selangor</span><button id="mapGpsButton">Use GPS</button></div></div>
+        <article class="map-card"><div class="map-toolbar"><div><strong><span id="mapActiveCount">0</span> active tree reports</strong><span>Prototype report layer</span></div><span class="fall-zone-toggle"><i></i>15m zones</span></div><div id="citizenMap" class="leaflet-map" aria-label="Tree safety map"></div><div class="map-legend"><span><i class="high"></i>High</span><span><i class="medium"></i>Medium</span><span><i class="monitor"></i>Monitor</span><span><i class="zone"></i>15m zone</span></div></article>
+        <article id="selectedMapReport" class="selected-report empty"><div class="empty-map-copy"><svg><use href="#i-tree"/></svg><p>Select a tree marker to view its reports and status.</p></div></article>
+        <div class="map-weather"><svg><use href="#i-cloud"/></svg><div><small>Conditions at this map location</small><strong id="mapWeatherText">Loading live forecast…</strong></div><button data-citizen-nav="home">Advisory</button></div>
+      </div>
+    </section>
+
+    <section class="citizen-view" data-citizen-view="reports">
+      <div class="mobile-shell reports-shell">
+        <div class="view-topline"><button class="back-home" data-citizen-nav="home"><svg><use href="#i-arrow"/></svg></button><div><span class="eyebrow">Closed-loop updates</span><h1>Every report stays visible.</h1><p>Demo records update whenever handlers take action on this device.</p></div></div>
+        <div class="report-filter-row"><button class="active" data-report-filter="all">All</button><button data-report-filter="active">Active</button><button data-report-filter="resolved">Resolved</button></div>
+        <div id="citizenReportsList" class="citizen-reports-list skeleton-list"></div>
+        <article id="citizenReportDetail" class="citizen-report-detail hidden"></article>
+        <button class="floating-report-button" data-citizen-nav="scan"><svg><use href="#i-camera"/></svg>New report</button>
+      </div>
+    </section>
+
+    <nav class="citizen-bottom-nav" aria-label="Resident navigation">
+      <button class="active" data-citizen-nav="home"><svg><use href="#i-home"/></svg><span>Home</span></button>
+      <button data-citizen-nav="scan"><svg><use href="#i-camera"/></svg><span>Report</span></button>
+      <button data-citizen-nav="map"><svg><use href="#i-map"/></svg><span>Safety Map</span></button>
+      <button data-citizen-nav="reports"><svg><use href="#i-file"/></svg><span>My Reports</span></button>
+    </nav>
+  </main>
+  <!-- Handler dashboard -->
+  <main id="handlerApp" class="handler-app hidden">
+    <aside class="handler-sidebar">
+      <div class="sidebar-heading"><span>Township operations</span><strong>Elmina Command Desk</strong></div>
+      <nav class="handler-nav"><button class="active" data-handler-view="overview"><svg><use href="#i-grid"/></svg><span>Overview</span></button><button data-handler-view="queue"><svg><use href="#i-list"/></svg><span>Triage queue</span><b id="queueBadge">0</b></button><button data-handler-view="riskmap"><svg><use href="#i-map"/></svg><span>Risk map</span></button></nav>
+      <div class="sidebar-weather"><span class="live-pill"><i></i>Live weather</span><strong id="handlerWeather">Connecting…</strong><p id="handlerWeatherLocation">Elmina, Shah Alam</p></div>
+      <div class="sidebar-disclaimer"><svg><use href="#i-alert"/></svg><p>Decision-support prototype. Final tree-risk judgement remains with trained personnel.</p></div>
+    </aside>
+    <section class="handler-workspace">
+      <header class="handler-header"><div><span class="eyebrow">Township handler dashboard</span><h1 id="handlerPageTitle">Risk operations overview</h1></div><div class="handler-actions"><span id="lastSynced">Loading device demo…</span><button id="refreshData"><svg><use href="#i-arrow"/></svg>Refresh</button></div></header>
+
+      <section class="handler-view active" data-handler-view-panel="overview">
+        <div id="kpiGrid" class="kpi-grid"><article><span>Active reports</span><strong id="kpiActive">--</strong><small>Device demo queue</small></article><article><span>High priority</span><strong id="kpiHigh">--</strong><small>Inspect first</small></article><article><span>Residents attached</span><strong id="kpiResidents">--</strong><small>Duplicate reports merged</small></article><article><span>Inspected / mitigated</span><strong id="kpiInspected">--</strong><small>Closed-loop progress</small></article><article><span>Average risk score</span><strong id="kpiRisk">--</strong><small>Across all tickets</small></article></div>
+        <div class="overview-grid">
+          <article class="dashboard-panel map-panel"><div class="panel-heading"><div><span class="eyebrow">Prototype geospatial view</span><h2>Live risk map</h2></div><button data-handler-view="riskmap">Expand map</button></div><div id="handlerOverviewMap" class="leaflet-map handler-map"></div><div class="map-legend handler-legend"><span><i class="high"></i>High</span><span><i class="medium"></i>Medium</span><span><i class="monitor"></i>Monitor</span></div></article>
+          <article class="dashboard-panel storm-ranker"><div class="panel-heading"><div><span class="eyebrow">Weather-sensitive scenario</span><h2>Live storm ranker</h2></div><span id="stormFactorBadge">1.00×</span></div><p class="panel-intro">Live weather loads automatically. Adjust the sliders to demonstrate a more severe forecast.</p><label>Wind gust <strong id="windSliderValue">-- km/h</strong><input id="windSlider" type="range" min="0" max="100" value="40"></label><label>Rainfall <strong id="rainSliderValue">-- mm</strong><input id="rainSlider" type="range" min="0" max="120" value="25"></label><div id="rankedList" class="ranked-list"></div></article>
+        </div>
+        <article class="dashboard-panel recent-activity"><div class="panel-heading"><div><span class="eyebrow">Latest demo updates</span><h2>Operational activity</h2></div><button data-handler-view="queue">Open full queue</button></div><div id="activityFeed" class="activity-feed"></div></article>
+      </section>
+
+      <section class="handler-view" data-handler-view-panel="queue">
+        <article class="dashboard-panel queue-panel"><div class="queue-controls"><div class="queue-tabs"><button class="active" data-queue-filter="all">All</button><button data-queue-filter="High">High risk</button><button data-queue-filter="Reported">Reported</button><button data-queue-filter="Scheduled">Scheduled</button><button data-queue-filter="Inspected">Inspected</button></div><label class="queue-search"><svg><use href="#i-search"/></svg><input id="queueSearch" placeholder="Search ticket, street, or tree"></label></div><div id="handlerQueue" class="handler-queue"></div></article>
+      </section>
+
+      <section class="handler-view" data-handler-view-panel="riskmap">
+        <div class="riskmap-layout"><article class="dashboard-panel full-map-panel"><div class="panel-heading"><div><span class="eyebrow">Reported-tree layer</span><h2>Township risk map</h2></div><span class="fall-zone-toggle"><i></i>15m fall zones shown</span></div><div id="handlerFullMap" class="leaflet-map full-handler-map"></div></article><aside id="handlerMapDetail" class="dashboard-panel handler-map-detail"><div class="empty-map-copy"><svg><use href="#i-tree"/></svg><p>Select a marker to inspect the report.</p></div></aside></div>
+      </section>
+    </section>
+  </main>
+  <!-- Modals and notifications -->
+  <dialog id="handlerReportDialog" class="report-dialog"><div class="dialog-shell"><button class="dialog-close" data-close-dialog aria-label="Close report">×</button><div id="handlerReportDetail"></div><form id="handlerActionForm" class="handler-action-form"><div class="action-form-heading"><span class="eyebrow">Record handler action</span><h3>Advance this demo ticket</h3></div><div class="action-fields"><label>Status<select id="handlerStatus"><option>Reported</option><option>Scheduled</option><option>Inspected</option><option>Arborist review</option><option>Mitigated</option></select></label><label>Schedule / appointment<input id="handlerSchedule" placeholder="Example: 22 Nov, 9:00 AM"></label><label class="wide">Handler note<textarea id="handlerNote" placeholder="Record visual findings, work completed, or reason for escalation."></textarea></label></div><div class="action-footer"><span><svg><use href="#i-bell"/></svg>All attached residents will receive this demo update.</span><button class="primary-action" type="submit">Save action & notify</button></div></form></div></dialog>
+  <dialog id="reportSuccessDialog" class="success-dialog"><div class="success-mark"><svg><use href="#i-check"/></svg></div><span class="eyebrow">Report saved on this device</span><h2 id="successTitle">Your report is now in the handler queue.</h2><p id="successCopy">You will see every future status update under My Reports on this device.</p><div id="successTicket" class="success-ticket"></div><button id="successDone" class="primary-action">Track this report</button></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="static-api.js"></script>
+  <script src="app.js" defer></script>
 </body>
 </html>
